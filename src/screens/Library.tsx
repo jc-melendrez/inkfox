@@ -50,7 +50,12 @@ export function Library() {
     for (const f of files) {
       try {
         added.push(
-          await api.materials.uploadMaterial({ name: f.name, size: f.size, type: f.type }),
+          await api.materials.uploadMaterial({
+            name: f.name,
+            size: f.size,
+            type: f.type,
+            file: f,
+          }),
         );
         notify(`Reading ${f.name}…`, "info");
       } catch (err) {
@@ -63,6 +68,11 @@ export function Library() {
 
   async function cancel(id: string) {
     await api.materials.cancelProcessing(id);
+    setData((data ?? []).filter((m) => m.id !== id));
+  }
+
+  async function remove(id: string) {
+    await api.materials.deleteMaterial(id);
     setData((data ?? []).filter((m) => m.id !== id));
   }
 
@@ -139,6 +149,21 @@ export function Library() {
                 />
               </div>
               <Button onClick={() => cancel(m.id)}>Cancel</Button>
+            </div>
+          ))}
+
+        {data
+          ?.filter((m) => m.status === "failed")
+          .map((m) => (
+            <div className="processing-row" key={m.id}>
+              <div>
+                <p className="filename">{m.title}</p>
+                <p className="muted text-sm">
+                  We could not read this file. Try exporting it again, or use a different
+                  format.
+                </p>
+              </div>
+              <Button onClick={() => remove(m.id)}>Remove</Button>
             </div>
           ))}
 

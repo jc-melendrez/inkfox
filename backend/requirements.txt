@@ -1,0 +1,10 @@
+# FoxTutor backend — pinned dependencies (verified together on Python 3.14.0, Windows)
+Django==6.1.2
+djangorestframework==3.18.3
+djangorestframework-camel-case==1.4.2
+django-cors-headers==4.9.0
+python-dotenv==1.2.4
+dj-database-url==3.1.2
+pypdf==6.21.1
+python-docx==1.2.0
+httpx==0.28.1

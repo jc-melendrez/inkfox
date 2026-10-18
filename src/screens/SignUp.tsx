@@ -18,6 +18,7 @@ export function SignUp() {
   const { signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { notify } = useToast();
+  const googleEnabled = import.meta.env.VITE_ENABLE_GOOGLE_AUTH === "true";
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -112,15 +113,26 @@ export function SignUp() {
             {busy ? "Creating account…" : "Create account"}
           </Button>
         </form>
-        <Button
-          fullWidth
-          onClick={async () => {
-            await loginWithGoogle();
-            navigate("/onboarding");
-          }}
-        >
-          Continue with Google
-        </Button>
+        {googleEnabled && (
+          <Button
+            fullWidth
+            onClick={async () => {
+              try {
+                await loginWithGoogle();
+                navigate("/onboarding");
+              } catch (err) {
+                notify(
+                  err instanceof ApiError
+                    ? err.message
+                    : "Google sign-in is not available right now.",
+                  "error",
+                );
+              }
+            }}
+          >
+            Continue with Google
+          </Button>
+        )}
         <p className="text-sm">
           Already have an account? <Link to="/login">Log in</Link>
         </p>

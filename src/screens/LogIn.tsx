@@ -11,6 +11,7 @@ export function LogIn() {
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { notify } = useToast();
+  const googleEnabled = import.meta.env.VITE_ENABLE_GOOGLE_AUTH === "true";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -35,8 +36,15 @@ export function LogIn() {
   }
 
   async function onGoogle() {
-    const user = await loginWithGoogle();
-    navigate(user.onboarded ? "/home" : "/onboarding");
+    try {
+      const user = await loginWithGoogle();
+      navigate(user.onboarded ? "/home" : "/onboarding");
+    } catch (err) {
+      notify(
+        err instanceof ApiError ? err.message : "Google sign-in is not available right now.",
+        "error",
+      );
+    }
   }
 
   return (
@@ -70,9 +78,11 @@ export function LogIn() {
         <button type="button" className="link-button" onClick={() => setResetOpen(true)}>
           Forgot password?
         </button>
-        <Button fullWidth onClick={onGoogle}>
-          Continue with Google
-        </Button>
+        {googleEnabled && (
+          <Button fullWidth onClick={onGoogle}>
+            Continue with Google
+          </Button>
+        )}
         <p className="text-sm">
           New here? <Link to="/signup">Create a free account</Link>
         </p>

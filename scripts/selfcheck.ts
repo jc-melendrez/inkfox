@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import * as api from "../src/api";
+import { getToken, request, setToken } from "../src/api/http";
 
 // Minimal localStorage shim so the mock persistence layer can run under Node.
 const store = new Map<string, string>();
@@ -77,6 +78,22 @@ async function main() {
   });
   assert.equal(user.name, "Test User", "whitespace trimmed and collapsed");
   assert.equal(user.onboarded, false);
+
+  // Token lifecycle: a 401 clears the stored token, except on login/signup.
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = (async () => new Response(null, { status: 401 })) as unknown as typeof fetch;
+
+  setToken("live-token");
+  await assert.rejects(() => request("/profile"));
+  assert.equal(getToken(), null, "401 clears the stored token");
+
+  setToken("fresh-token");
+  await assert.rejects(() =>
+    request("/auth/login", { method: "POST", json: {}, preserveTokenOn401: true }),
+  );
+  assert.equal(getToken(), "fresh-token", "login keeps its token on 401");
+
+  globalThis.fetch = realFetch;
 
   console.log("selfcheck: all assertions passed");
 }

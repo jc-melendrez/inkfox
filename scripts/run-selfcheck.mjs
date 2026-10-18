@@ -18,6 +18,13 @@ for (const entry of ["scripts/selfcheck.ts", "scripts/rendercheck.tsx"]) {
     packages: "external",
     outfile: out,
     logLevel: "silent",
+    define: {
+      "import.meta.env": JSON.stringify({
+        VITE_API_MODE: "mock",
+        VITE_API_BASE_URL: "/api",
+        VITE_ENABLE_GOOGLE_AUTH: "false",
+      }),
+    },
   });
   await import(pathToFileURL(out).href);
 }

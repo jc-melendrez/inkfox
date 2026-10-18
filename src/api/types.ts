@@ -33,7 +33,7 @@ export interface ProfileStats {
 
 /* ---------------- Materials ---------------- */
 
-export type MaterialStatus = "processing" | "ready";
+export type MaterialStatus = "processing" | "ready" | "failed";
 
 export interface Material {
   id: ID;
@@ -52,6 +52,8 @@ export interface UploadInput {
   name: string;
   size: number;
   type: string;
+  /** The actual file, present in real mode (multipart upload). */
+  file?: File;
 }
 
 /* ---------------- Questions ---------------- */

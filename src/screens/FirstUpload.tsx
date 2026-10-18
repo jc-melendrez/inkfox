@@ -27,10 +27,15 @@ export function FirstUpload() {
     }
   }
 
-  async function upload(name: string, size: number, type: string) {
+  async function upload(file: File) {
     setBusy(true);
     try {
-      await api.materials.uploadMaterial({ name, size, type });
+      await api.materials.uploadMaterial({
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        file,
+      });
     } catch {
       /* the library shows processing progress; errors are non-blocking here */
     }
@@ -67,7 +72,7 @@ export function FirstUpload() {
         title="Drop a file here, or browse files"
         onFiles={(files) => {
           const f = files[0];
-          if (f) upload(f.name, f.size, f.type);
+          if (f) upload(f);
         }}
       />
       <div className="row">

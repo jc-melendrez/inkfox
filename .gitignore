@@ -2,3 +2,12 @@ node_modules
 dist
 *.local
 .DS_Store
+
+# --- Django backend ---
+backend/.venv/
+__pycache__/
+*.py[cod]
+.env
+backend/db.sqlite3
+backend/db.sqlite3-*
+backend/media/

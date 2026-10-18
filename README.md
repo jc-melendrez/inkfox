@@ -1,12 +1,13 @@
-# FoxTutor — Phase 1 (frontend on mock data)
+# FoxTutor
 
 AI essay-tutoring platform. Users upload learning material, answer AI-generated
 questions using a structure (PEEL / TEEL), get friendly specific feedback, revise,
 and track progress toward mastery.
 
-**Phase 1 scope:** all 12 screens, navigable end-to-end against a typed mock API.
-No backend yet. Every choice is made so Phase 2 (Django REST + PostgreSQL) is a
-drop-in replacement of the `src/api/` layer.
+**Phase 1 (frontend on mock data):** all 12 screens, navigable end-to-end against a
+typed mock API. **Phase 2 (added):** a real Django REST backend in `backend/` that
+implements the same contract, plus a switchable frontend API layer. The mock remains
+the default so the app runs with no backend.
 
 ## Stack
 
@@ -15,6 +16,7 @@ drop-in replacement of the `src/api/` layer.
 - No UI, CSS, state or chart libraries (kept deliberately lean; the later redesign
   is a token swap plus light component restyle)
 - Design tokens in `src/styles/tokens.css` (one accent, neutral grays)
+- Backend: Django 6 + Django REST Framework, SQLite, DRF token auth (see `backend/`)
 
 ## Run it
 
@@ -32,6 +34,24 @@ with any email/password (mock auth accepts anything). State is saved to
 `localStorage` (`foxtutor.db.v1`), so drafts, uploads and resume survive a reload.
 Profile → Delete account resets it.
 
+### Running against the real backend
+
+The `src/api/` layer has two implementations behind one barrel: `mock/` (default)
+and `real/` (fetch to Django). Pick with an env var:
+
+```bash
+# 1. Start the backend (see backend/README.md for setup). Set DEBUG=True in
+#    backend/.env for local use — DEBUG defaults to off and needs a real SECRET_KEY.
+cd backend && .venv\Scripts\python.exe manage.py runserver
+
+# 2. Point the frontend at it:
+cp .env.example .env.local     # then set VITE_API_MODE=real
+npm run dev                    # /api is proxied to http://localhost:8000
+```
+
+`VITE_API_BASE_URL` (default `/api`) is the real API base. `VITE_ENABLE_GOOGLE_AUTH=true`
+shows the "Continue with Google" button (the backend returns 501 until OAuth is wired).
+
 ### Dev-only state switcher
 
 A small "Dev state" pill (bottom-left, dev builds only) forces every API call to
@@ -42,12 +62,13 @@ A small "Dev state" pill (bottom-left, dev builds only) forces every API call to
 
 ```
 src/
-  api/            typed mock API — the ONLY place mock data lives
+  api/            the ONLY place API data lives; one barrel, two implementations
     types.ts      User, Material, Question, Essay, Feedback, Progress, Settings…
-    client.ts     delay + loading/empty/error simulation (Phase 2: real fetch)
-    mockData.ts   seeded, localStorage-persisted store (imported only by api/*)
-    auth|materials|questions|essays|feedback|progress|sessions|settings|profile.ts
-    index.ts      namespaced barrel (api.materials.listMaterials(), …)
+    client.ts     ApiError + mock loading/empty/error simulation
+    http.ts       real fetch transport (token, errors) — used by real/
+    mock/         seeded, localStorage-persisted store + mock functions
+    real/         thin fetch wrappers over the Django endpoints
+    index.ts      picks mock/ or real/ from VITE_API_MODE; namespaced barrel
   components/     reusable set: Button, Input, Select, Textarea, Checkbox,
                   RadioCard, Card, ProgressBar, Tag, Modal, Toast, Sidebar,
                   FoxPlaceholder, DropZone, EmptyState, Spinner, ScoreTrendChart,
@@ -60,9 +81,10 @@ src/
   styles/         tokens.css, base.css, components.css, layouts.css, screens.css
   routes.tsx      routes + auth/onboarding guards
   App.tsx         providers + router
+backend/          Django REST API (see backend/README.md)
 ```
 
-**Rule:** components never import `mockData.ts`; they only call `api/` functions.
+**Rule:** components never import `mock/` data; they only call `api/` functions.
 
 ## Screens / routes
 
@@ -83,8 +105,11 @@ src/
 ## API contract for the Django backend
 
 Each `src/api/<module>.ts` function maps to one endpoint. Request/response bodies
-are the TypeScript types in `src/api/types.ts`. Replace the body of `respond()`
-in `client.ts` with `fetch` and keep the signatures.
+are the TypeScript types in `src/api/types.ts`. `real/` implements them with `fetch`
+(Django backend); `mock/` simulates them. IDs are strings on the wire and bodies are
+camelCase (the backend uses `djangorestframework-camel-case`). Auth uses a DRF token
+sent as `Authorization: Token <key>`; signup/login/password change return a fresh
+token in the `X-Auth-Token` response header.
 
 | Function | Method + path | Request | Response |
 |---|---|---|---|
