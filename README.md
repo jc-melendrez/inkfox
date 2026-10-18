@@ -15,8 +15,33 @@ the default so the app runs with no backend.
 - React Router v6
 - No UI, CSS, state or chart libraries (kept deliberately lean; the later redesign
   is a token swap plus light component restyle)
-- Design tokens in `src/styles/tokens.css` (one accent, neutral grays)
+- Design tokens in `src/styles/tokens.css` (cream/ink neutrals, one terracotta accent,
+  system fonts)
 - Backend: Django 6 + Django REST Framework, SQLite, DRF token auth (see `backend/`)
+
+## Design tokens
+
+All colour, type, radius, shadow and control sizing lives in `src/styles/tokens.css`;
+components and screens reference the tokens only (no hard-coded colours). To reskin the
+app, edit that one file.
+
+- **Neutrals:** a cream-paper → ink-navy ramp (`--gray-*`) exposed as semantic tokens
+  (`--color-bg`, `--color-surface`, `--color-text`, `--color-text-muted`, `--color-border`,
+  `--color-border-control`).
+- **Accent:** one terracotta scale (`--accent-*` → `--color-accent`, `--color-accent-soft-bg`).
+  Exactly one accent-filled primary action per screen.
+- **Status:** `--color-success` / `--color-warning` / `--color-danger` with matching
+  `*-bg` tints; status is always shown with an icon **and** text, never colour alone.
+- **Fonts (system only):** `--font-ui` (interface), `--font-heading` (headings, serif),
+  `--font-essay` (essay text, serif). No webfont downloads.
+- **Shape:** `--radius-sm|md|lg|pill` (cards 12px, controls 10px, pills rounded).
+- **Depth:** one soft card shadow (`--shadow-card`).
+- **Controls:** `--control-min-height: max(2.75rem, 44px)` (and `-lg`) keeps every
+  button, input and select at least 44px at any text size.
+- **Focus:** `--color-focus` ring drawn with `--focus-ring-width` and `--focus-ring-offset`.
+
+`npm run contrast` checks the WCAG ratios (4.5:1 text, 3:1 UI) for the pairs the app
+uses and exits non-zero if any drops below.
 
 ## Run it
 
@@ -27,6 +52,7 @@ npm run build      # type-check + production build
 npm run typecheck  # tsc --noEmit
 npm run lint       # eslint .
 npm run selfcheck  # assert-based check of the api/ logic (Node + esbuild)
+npm run contrast   # WCAG contrast gate for the design tokens
 ```
 
 First run starts logged out. Go through **Sign up → onboarding → app**, or **Log in**

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "selfcheck": "node scripts/run-selfcheck.mjs"
+    "selfcheck": "node scripts/run-selfcheck.mjs",
+    "contrast": "node scripts/contrastcheck.mjs"
   },
   "dependencies": {
     "react": "^18.3.1",
