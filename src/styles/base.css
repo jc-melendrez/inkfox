@@ -19,7 +19,7 @@ body,
 
 body {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-ui);
   font-size: var(--font-size-md);
   line-height: var(--line-normal);
   color: var(--color-text);
@@ -36,6 +36,12 @@ figure {
   margin: 0;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+}
 h1 {
   font-size: var(--font-size-3xl);
   line-height: var(--line-tight);
@@ -72,8 +78,8 @@ button {
 
 /* Visible focus indicator on every interactive element (WCAG 2.4.7). */
 :focus-visible {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
   border-radius: var(--radius-sm);
 }
 
