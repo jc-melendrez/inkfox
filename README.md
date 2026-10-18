@@ -1,4 +1,4 @@
-# FoxTutor
+# Redraft
 
 AI essay-tutoring platform. Users upload learning material, answer AI-generated
 questions using a structure (PEEL / TEEL), get friendly specific feedback, revise,
@@ -71,7 +71,7 @@ src/
     index.ts      picks mock/ or real/ from VITE_API_MODE; namespaced barrel
   components/     reusable set: Button, Input, Select, Textarea, Checkbox,
                   RadioCard, Card, ProgressBar, Tag, Modal, Toast, Sidebar,
-                  FoxPlaceholder, DropZone, EmptyState, Spinner, ScoreTrendChart,
+                  DropZone, EmptyState, Spinner, ScoreTrendChart,
                   ConfirmDialog, DevStateSwitcher
   context/        AuthContext, SettingsContext, ToastContext
   hooks/          useAsync, useAutosave, useTimer

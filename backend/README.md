@@ -1,6 +1,6 @@
-# FoxTutor backend
+# Redraft backend
 
-Django 6 + Django REST Framework API for FoxTutor. Implements the endpoint contract
+Django 6 + Django REST Framework API for Redraft. Implements the endpoint contract
 documented in the root `README.md` so the frontend can run against real data by
 setting `VITE_API_MODE=real`.
 
