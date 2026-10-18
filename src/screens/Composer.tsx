@@ -7,7 +7,6 @@ import {
   Card,
   Checkbox,
   EmptyState,
-  FoxPlaceholder,
   Spinner,
   Tag,
   Textarea,
@@ -89,6 +88,7 @@ function ComposerEditor({
   const [seeded, setSeeded] = useState(false);
   const [checks, setChecks] = useState<boolean[]>([false, false, false, false]);
   const [submitting, setSubmitting] = useState(false);
+  const [tipDismissed, setTipDismissed] = useState(false);
   const timer = useTimer(settings.timerMinutes, settings.pressureTimer);
 
   useEffect(() => {
@@ -226,15 +226,23 @@ function ComposerEditor({
               ))}
             </ul>
           </Card>
-          <div className="tip-box">
-            <div className="row">
-              <FoxPlaceholder state="idle" size="sm" label="Fox" />
-              <strong>Fox tip (optional helper)</strong>
+          {!tipDismissed && (
+            <div className="tip-box">
+              <div className="row row--between">
+                <strong>Tip</strong>
+                <button
+                  type="button"
+                  className="link-button"
+                  onClick={() => setTipDismissed(true)}
+                >
+                  Dismiss
+                </button>
+              </div>
+              <p className="muted">
+                Try to answer the question in your first sentence, then back it up with evidence.
+              </p>
             </div>
-            <p className="muted">
-              Try to answer the question in your first sentence, then back it up with evidence.
-            </p>
-          </div>
+          )}
           {revising && priorFeedback && (
             <Card>
               <h2 className="card__heading">Previous feedback</h2>

@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { FoxPlaceholder } from "./FoxPlaceholder";
 
 const ITEMS = [
   { to: "/home", label: "Home" },
@@ -14,8 +13,7 @@ export function Sidebar() {
   return (
     <aside className="sidebar">
       <NavLink to="/home" className="sidebar__brand">
-        <FoxPlaceholder state="idle" size="sm" label="Fox" />
-        <span>FoxTutor</span>
+        <span className="wordmark">Redraft</span>
       </NavLink>
       <nav className="sidebar__nav" aria-label="Main">
         {ITEMS.map((item) => (

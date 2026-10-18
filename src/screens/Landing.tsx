@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FoxPlaceholder, Tag } from "../components";
+import { Tag } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { METHOD_PARTS, METHODS } from "../lib/methods";
 
@@ -28,8 +28,7 @@ export function Landing() {
       <header className="topbar">
         <div className="topbar__inner">
           <Link to="/" className="brand">
-            <FoxPlaceholder size="sm" label="Fox" />
-            <span>FoxTutor</span>
+            <span className="wordmark">Redraft</span>
           </Link>
           <nav className="topbar__nav" aria-label="Primary">
             <a href="#how-it-works">How it works</a>
@@ -70,9 +69,6 @@ export function Landing() {
             </div>
             <p className="muted text-sm">PDF, DOCX and TXT accepted. No card needed.</p>
           </div>
-          <div className="hero__media">
-            <FoxPlaceholder state="waving" size="lg" label="Fox mascot and product preview" />
-          </div>
         </section>
 
         <section className="steps" id="how-it-works" aria-label="How it works">
@@ -102,7 +98,7 @@ export function Landing() {
       </main>
 
       <footer className="site-footer">
-        <span>© FoxTutor</span>
+        <span>© Redraft</span>
         <nav aria-label="Footer" className="footer-placeholders">
           {["Privacy", "Terms", "Contact"].map((label) => (
             <span key={label} className="footer-placeholder" title="Placeholder link">

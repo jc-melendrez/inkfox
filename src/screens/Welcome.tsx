@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button, FoxPlaceholder } from "../components";
+import { Button } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { OnboardingLayout } from "../layouts/OnboardingLayout";
 
@@ -35,9 +35,8 @@ export function Welcome() {
       }
     >
       <div className="stack" style={{ alignItems: "center", textAlign: "center" }}>
-        <FoxPlaceholder state="waving" size="lg" label="Fox waving" />
-        <h1 className="page-title">Hi, I am Fox! Let us get you writing.</h1>
-        <p className="muted">Here is how FoxTutor works:</p>
+        <h1 className="page-title">Welcome to Redraft</h1>
+        <p className="muted">Here is how it works:</p>
         <ol className="stack" style={{ textAlign: "left" }}>
           {HOW.map((item) => (
             <li key={item}>{item}</li>

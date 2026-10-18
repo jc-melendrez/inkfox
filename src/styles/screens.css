@@ -1,19 +1,14 @@
 /* ===================== Landing ===================== */
 .hero {
   flex: 1;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: var(--space-8);
   padding: var(--space-10) var(--space-6);
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
-  align-content: center;
-  align-items: center;
-}
-@media (min-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr 1fr;
-  }
 }
 .hero__copy {
   display: flex;
@@ -22,7 +17,7 @@
   max-width: 34rem;
 }
 .hero__title {
-  font-size: 2.75rem;
+  font-size: var(--font-size-display);
   line-height: var(--line-tight);
   font-weight: var(--weight-bold);
 }
@@ -34,18 +29,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
-}
-.hero__media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24rem;
-  border: 2px dashed var(--color-border-strong);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface-muted);
-  color: var(--color-text-muted);
-  text-align: center;
-  padding: var(--space-5);
 }
 .steps {
   display: grid;
@@ -328,7 +311,7 @@
   flex-direction: column;
   gap: var(--space-2);
   padding: var(--space-4);
-  border: 2px dashed var(--color-border-strong);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface-muted);
   font-size: var(--font-size-sm);

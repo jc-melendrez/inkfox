@@ -80,7 +80,7 @@
   justify-self: center;
 }
 @media (min-width: 900px) {
-  /* Sign up: one centred row — fox/benefits (~380px) + form card (~460px). */
+  /* Sign up: one centred row — benefits (~380px) + form card (~460px). */
   .auth-layout:not(.auth-layout--single) {
     grid-template-columns: minmax(0, 23.75rem) minmax(0, 28.75rem);
     justify-items: stretch;

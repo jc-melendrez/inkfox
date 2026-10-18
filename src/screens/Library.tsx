@@ -125,7 +125,7 @@ export function Library() {
         {data && data.length === 0 && !loading && (
           <EmptyState
             title="No materials yet"
-            message="Upload a file above and Fox will create practice questions for you."
+            message="Upload a file above and we will create practice questions for you."
           />
         )}
 

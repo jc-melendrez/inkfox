@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { MethodKey } from "../api/types";
 import * as api from "../api";
 import { ApiError } from "../api/client";
-import { Button, DropZone, FoxPlaceholder } from "../components";
+import { Button, DropZone } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { OnboardingLayout } from "../layouts/OnboardingLayout";
 
@@ -75,12 +75,9 @@ export function FirstUpload() {
           if (f) upload(f);
         }}
       />
-      <div className="row">
-        <FoxPlaceholder state="reading" size="sm" label="Fox reading" />
-        <p className="text-sm muted">
-          Fox: No file handy? Try a sample passage and explore first.
-        </p>
-      </div>
+      <p className="text-sm muted">
+        No file handy? Try a sample passage and explore first.
+      </p>
       <Button fullWidth onClick={useSample} disabled={busy}>
         Use a sample passage
       </Button>

@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import * as api from "../api";
-import { Button, Card, EmptyState, FoxPlaceholder, ProgressBar, Spinner } from "../components";
+import { Button, Card, EmptyState, ProgressBar, Spinner } from "../components";
 import { useAsync } from "../hooks/useAsync";
 
 export function SessionComplete() {
@@ -22,7 +22,6 @@ export function SessionComplete() {
 
   return (
     <div className="celebrate">
-      <FoxPlaceholder state="celebrating" size="lg" label="Fox celebrating" />
       <h1 className="page-title">Session complete!</h1>
       <p className="muted">
         {data.essaysCompleted} {data.essaysCompleted === 1 ? "essay" : "essays"} · average score{" "}

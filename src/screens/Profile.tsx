@@ -8,7 +8,6 @@ import {
   Card,
   ConfirmDialog,
   EmptyState,
-  FoxPlaceholder,
   Input,
   Modal,
   Select,
@@ -81,9 +80,9 @@ export function ProfileScreen() {
         <Card className="stack">
           <div className="row">
             {photo ? (
-              <img className="fox fox--md" src={photo} alt="Your profile photo" />
+              <img className="avatar avatar--md" src={photo} alt="Your profile photo" />
             ) : (
-              <FoxPlaceholder size="md" label="Photo" />
+              <span className="avatar avatar--md" aria-hidden="true" />
             )}
             <Button onClick={() => photoRef.current?.click()}>Change photo</Button>
             <input

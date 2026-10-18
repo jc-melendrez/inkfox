@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as api from "../api";
 import { ApiError } from "../api/client";
-import { Button, Card, FoxPlaceholder, Input, Modal } from "../components";
+import { Button, Card, Input, Modal } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { AuthLayout } from "../layouts/AuthLayout";
@@ -50,7 +50,6 @@ export function LogIn() {
   return (
     <AuthLayout>
       <Card className="stack">
-        <FoxPlaceholder size="sm" label="Fox" />
         <div>
           <h1 className="page-title">Welcome back</h1>
           <p className="muted">Pick up where you left off.</p>

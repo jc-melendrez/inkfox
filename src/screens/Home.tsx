@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import * as api from "../api";
-import { Button, Card, EmptyState, FoxPlaceholder, ProgressBar, Spinner } from "../components";
+import { Button, Card, EmptyState, ProgressBar, Spinner } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { useAsync } from "../hooks/useAsync";
 import { relativeDay } from "../lib/format";
@@ -39,7 +39,6 @@ export function Home() {
   return (
     <>
       <div className="home-head">
-        <FoxPlaceholder state="waving" size="md" label="Fox waving" />
         <div className="grow">
           <h1 className="page-title">Welcome back{user ? `, ${user.name.split(" ")[0]}` : ""}!</h1>
           <p className="muted">{profile.data.stats.dayStreak}-day streak. Keep it going.</p>

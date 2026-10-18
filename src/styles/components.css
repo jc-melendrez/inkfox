@@ -363,32 +363,37 @@ dialog.modal::backdrop {
   font-weight: var(--weight-bold);
 }
 
-/* ===================== FoxPlaceholder ===================== */
-.fox {
+/* ===================== Wordmark ===================== */
+.wordmark {
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  color: var(--color-accent);
+  letter-spacing: 0.01em;
+}
+
+/* ===================== Avatar ===================== */
+.avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  border: 2px dashed var(--color-border-strong);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
   border-radius: 50%;
   background: var(--color-surface-muted);
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
-  padding: var(--space-2);
+  object-fit: cover;
   flex: none;
 }
-.fox--sm {
+.avatar--sm {
   width: 2.75rem;
   height: 2.75rem;
 }
-.fox--md {
+.avatar--md {
   width: 5rem;
   height: 5rem;
 }
-.fox--lg {
+.avatar--lg {
   width: 9rem;
   height: 9rem;
-  font-size: var(--font-size-sm);
 }
 
 /* ===================== DropZone ===================== */

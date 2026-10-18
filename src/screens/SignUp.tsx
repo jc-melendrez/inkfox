@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import type { UserRole } from "../api/types";
-import { Button, Card, Checkbox, FoxPlaceholder, Input, Select } from "../components";
+import { Button, Card, Checkbox, Input, Select } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { AuthLayout } from "../layouts/AuthLayout";
@@ -52,8 +52,7 @@ export function SignUp() {
     <AuthLayout
       aside={
         <>
-          <FoxPlaceholder state="waving" size="lg" label="Fox waving" />
-          <h2>Join FoxTutor in a minute</h2>
+          <h2>Join Redraft in a minute</h2>
           <ul className="auth-points">
             {BENEFITS.map((b) => (
               <li key={b}>{b}</li>

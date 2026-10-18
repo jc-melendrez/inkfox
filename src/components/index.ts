@@ -11,7 +11,6 @@ export { Tag } from "./Tag";
 export { Modal } from "./Modal";
 export { Toast, type ToastItem } from "./Toast";
 export { Sidebar } from "./Sidebar";
-export { FoxPlaceholder, type FoxState } from "./FoxPlaceholder";
 export { DropZone } from "./DropZone";
 export { EmptyState } from "./EmptyState";
 export { Spinner } from "./Spinner";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { MethodKey } from "../api/types";
-import { Button, FoxPlaceholder, RadioCard, Tag } from "../components";
+import { Button, RadioCard, Tag } from "../components";
 import { OnboardingLayout } from "../layouts/OnboardingLayout";
 
 type Choice = MethodKey | "unsure";
@@ -60,10 +60,7 @@ export function PickMethod() {
           description="We will start you on PEEL. Change anytime in Settings."
         />
       </fieldset>
-      <div className="row">
-        <FoxPlaceholder state="idle" size="sm" label="Fox" />
-        <p className="text-sm muted">Fox: Start with PEEL and I will guide you step by step.</p>
-      </div>
+      <p className="text-sm muted">Start with PEEL and we will guide you step by step.</p>
     </OnboardingLayout>
   );
 }
