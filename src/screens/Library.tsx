@@ -156,14 +156,17 @@ export function Library() {
           ?.filter((m) => m.status === "failed")
           .map((m) => (
             <div className="processing-row" key={m.id}>
-              <div>
+              <div className="processing-row__info">
                 <p className="filename">{m.title}</p>
                 <p className="muted text-sm">
-                  We could not read this file. Try exporting it again, or use a different
-                  format.
+                  {m.failureReason ??
+                    "We could not read this file. Try exporting it again, or use a different format."}
                 </p>
               </div>
-              <Button onClick={() => remove(m.id)}>Remove</Button>
+              <div className="row">
+                <Button onClick={() => fileRef.current?.click()}>Try another file</Button>
+                <Button onClick={() => remove(m.id)}>Remove</Button>
+              </div>
             </div>
           ))}
 

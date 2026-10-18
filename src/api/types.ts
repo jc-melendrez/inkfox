@@ -46,6 +46,8 @@ export interface Material {
   status: MaterialStatus;
   /** 0-100, present while status === "processing". */
   processingProgress?: number;
+  /** Friendly explanation, present when status === "failed". */
+  failureReason?: string;
 }
 
 export interface UploadInput {
