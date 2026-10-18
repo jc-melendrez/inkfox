@@ -9,6 +9,7 @@ def main():
     # The test suite runs without a .env; give it an ephemeral dev config so the
     # DEBUG/SECRET_KEY guard in settings.py still protects real runs.
     if "test" in sys.argv:
+        os.environ.setdefault("FOXTUTOR_TESTING", "1")
         os.environ.setdefault("DEBUG", "True")
         os.environ.setdefault("SECRET_KEY", "django-insecure-test-only-not-for-deploy")
 
