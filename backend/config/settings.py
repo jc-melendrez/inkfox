@@ -133,15 +133,17 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # --- i18n --------------------------------------------------------------------
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
 USE_I18N = True
 USE_TZ = True
 
 # --- Static / media ----------------------------------------------------------
 STATIC_URL = "static/"
+# collectstatic output (Django admin assets); served by Nginx in production.
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Uploaded material files live outside the web root and are only ever read by the
 # server (via authenticated views), never served directly.
-MEDIA_ROOT = BASE_DIR / "media" / "private"
+MEDIA_ROOT = Path(os.getenv("MEDIA_ROOT", BASE_DIR / "media" / "private"))
 
 # --- Django REST Framework ---------------------------------------------------
 REST_FRAMEWORK = {
@@ -190,6 +192,22 @@ SECURE_CSP = {
     "form-action": ["'none'"],
 }
 SECURE_CSP_REPORT_ONLY = {}
+
+# --- HTTPS / reverse proxy ---------------------------------------------------
+# Enabled automatically when DEBUG is off (production); set USE_HTTPS=False to
+# run the IP-only demo over plain HTTP. Nginx forwards X-Forwarded-Proto.
+USE_HTTPS = env_bool("USE_HTTPS", not DEBUG)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = USE_HTTPS
+SESSION_COOKIE_SECURE = USE_HTTPS
+CSRF_COOKIE_SECURE = USE_HTTPS
+# Short initial HSTS window (1h) so it is easy to back out before lengthening it.
+SECURE_HSTS_SECONDS = env_int("SECURE_HSTS_SECONDS", 3600 if USE_HTTPS else 0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool(
+    "SECURE_HSTS_INCLUDE_SUBDOMAINS", USE_HTTPS
+)
+SECURE_HSTS_PRELOAD = env_bool("SECURE_HSTS_PRELOAD", USE_HTTPS)
+CSRF_TRUSTED_ORIGINS = env_list("CSRF_TRUSTED_ORIGINS", [])
 
 # --- Uploads -----------------------------------------------------------------
 MAX_MATERIAL_SIZE = env_int("MAX_MATERIAL_SIZE", 10 * 1024 * 1024)  # 10 MB
