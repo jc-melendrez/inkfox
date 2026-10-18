@@ -38,6 +38,7 @@ class Essay(models.Model):
     content = models.TextField()
     word_count = models.PositiveIntegerField(default=0)
     revision_number = models.PositiveIntegerField(default=1)
+    instructions = models.CharField(max_length=400, blank=True, default="")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

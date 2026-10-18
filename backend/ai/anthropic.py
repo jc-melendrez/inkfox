@@ -35,9 +35,9 @@ def generate_questions(material_text, method, existing_questions):
     return schema.validate_questions(parse_json(text))
 
 
-def evaluate_essay(essay_text, method, question_text):
+def evaluate_essay(essay_text, method, question_text, instructions=""):
     text = _complete(
         prompts.FEEDBACK_SYSTEM,
-        prompts.feedback_prompt(essay_text, method, question_text),
+        prompts.feedback_prompt(essay_text, method, question_text, instructions),
     )
     return schema.validate_feedback(parse_json(text), method)

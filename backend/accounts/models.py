@@ -72,6 +72,7 @@ class Settings(models.Model):
     text_size = models.CharField(
         max_length=8, choices=TextSize.choices, default=TextSize.MEDIUM
     )
+    default_instructions = models.CharField(max_length=400, blank=True, default="")
 
     def __str__(self):
         return f"Settings({self.user_id})"

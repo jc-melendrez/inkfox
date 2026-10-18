@@ -31,5 +31,5 @@ def generate_questions(material_text, method, existing_questions):
     return _implementation().generate_questions(material_text, method, existing_questions)
 
 
-def evaluate_essay(essay_text, method, question_text):
-    return _implementation().evaluate_essay(essay_text, method, question_text)
+def evaluate_essay(essay_text, method, question_text, instructions=""):
+    return _implementation().evaluate_essay(essay_text, method, question_text, instructions)

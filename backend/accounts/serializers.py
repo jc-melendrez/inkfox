@@ -14,6 +14,7 @@ NAME_REQUIRED = "Please add your name."
 PASSWORD_TOO_SHORT = "Your password needs at least 8 characters."
 EMAIL_INVALID = "That email looks incomplete. Check it and try again."
 CREDENTIALS_INVALID = "That email and password don't match. Please try again."
+INSTRUCTIONS_TOO_LONG = "Keep your default instructions to 400 characters or fewer."
 
 
 def normalise_name(value):
@@ -126,7 +127,19 @@ class SettingsSerializer(serializers.ModelSerializer):
             "daily_reminder",
             "weekly_summary",
             "text_size",
+            "default_instructions",
         ]
+        extra_kwargs = {
+            "default_instructions": {
+                "error_messages": {"max_length": INSTRUCTIONS_TOO_LONG},
+            }
+        }
+
+    def validate_default_instructions(self, value):
+        instructions = value.strip()
+        if len(instructions) > 400:
+            raise serializers.ValidationError(INSTRUCTIONS_TOO_LONG)
+        return instructions
 
 
 class OnboardingSerializer(serializers.Serializer):

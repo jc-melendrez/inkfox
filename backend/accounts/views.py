@@ -222,6 +222,7 @@ def export_data(request):
                 "content": essay.content,
                 "word_count": essay.word_count,
                 "revision_number": essay.revision_number,
+                "instructions": essay.instructions,
                 "created_at": essay.created_at.isoformat(),
             }
             for essay in user.essays.all()

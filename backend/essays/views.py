@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.response import Response
 
 from ai import provider
+from ai.prompts import MAX_INSTRUCTIONS
 from common.throttles import AIRateThrottle
 from feedback import services as feedback_services
 from feedback.serializers import FeedbackSerializer
@@ -29,7 +30,22 @@ def _clean_content(request):
     return content
 
 
-def _store_feedback(user, question, content, data):
+def _clean_instructions(request):
+    """Optional learner preferences: trimmed and bounded, or a friendly 400."""
+    instructions = request.data.get("instructions", "")
+    if not isinstance(instructions, str):
+        raise serializers.ValidationError(
+            {"instructions": "Please write your instructions as text."}
+        )
+    instructions = instructions.strip()
+    if len(instructions) > MAX_INSTRUCTIONS:
+        raise serializers.ValidationError(
+            {"instructions": "Keep your instructions to 400 characters or fewer."}
+        )
+    return instructions
+
+
+def _store_feedback(user, question, content, data, instructions=""):
     """Create the next revision and its feedback, then refresh method mastery.
 
     The revision number is unique per question; if two submits race and pick the
@@ -44,6 +60,7 @@ def _store_feedback(user, question, content, data):
                     question=question,
                     content=content,
                     revision_number=revision,
+                    instructions=instructions,
                 )
                 feedback = feedback_services.create_from_data(essay, data)
                 refresh_method_mastery(user, question.method)
@@ -87,8 +104,9 @@ def submit_essay(request, pk):
         raise serializers.ValidationError(
             {"content": "That's very long. Try trimming it a little."}
         )
+    instructions = _clean_instructions(request)
 
     # Ask the tutor first; if AI is off/busy nothing is saved and it can be retried.
-    data = provider.evaluate_essay(content, question.method, question.text)
-    feedback = _store_feedback(request.user, question, content, data)
+    data = provider.evaluate_essay(content, question.method, question.text, instructions)
+    feedback = _store_feedback(request.user, question, content, data, instructions)
     return Response(FeedbackSerializer(feedback).data, status=status.HTTP_201_CREATED)
