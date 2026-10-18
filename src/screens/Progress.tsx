@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   EmptyState,
+  Icon,
   ProgressBar,
   ScoreTrendChart,
   Spinner,
@@ -18,8 +19,8 @@ export function ProgressScreen() {
   if (loading) return <Spinner label="Loading your progress…" />;
   if (error || !data) {
     return (
-      <EmptyState title="We could not load your progress" message={error ?? undefined}>
-        <Button onClick={reload}>Try again</Button>
+      <EmptyState title="We could not load your progress" message={error ?? undefined} icon="error">
+        <Button icon="retry" onClick={reload}>Try again</Button>
       </EmptyState>
     );
   }
@@ -50,7 +51,9 @@ export function ProgressScreen() {
         </div>
         {data.resume && (
           <Card className="stack">
-            <h2 className="card__heading">Continue where you left off</h2>
+            <h2 className="card__heading">
+              <Icon name="clock" size="sm" /> Continue where you left off
+            </h2>
             <p className="muted text-sm">
               {data.resume.materialTitle} · Question {data.resume.questionIndex} ·{" "}
               {data.resume.savedAt && relativeDay(data.resume.savedAt)}

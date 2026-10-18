@@ -14,8 +14,8 @@ export function SessionComplete() {
   if (loading) return <Spinner label="Adding up your session…" />;
   if (error || !data) {
     return (
-      <EmptyState title="We could not load your session" message={error ?? undefined}>
-        <Button onClick={reload}>Try again</Button>
+      <EmptyState title="We could not load your session" message={error ?? undefined} icon="error">
+        <Button icon="retry" onClick={reload}>Try again</Button>
       </EmptyState>
     );
   }

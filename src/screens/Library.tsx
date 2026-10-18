@@ -8,6 +8,7 @@ import {
   Card,
   DropZone,
   EmptyState,
+  Icon,
   ProgressBar,
   Spinner,
   Tag,
@@ -91,7 +92,7 @@ export function Library() {
     <>
       <div className="page-head">
         <h1 className="page-title">Your materials</h1>
-        <Button variant="primary" onClick={() => fileRef.current?.click()}>
+        <Button variant="primary" icon="upload" onClick={() => fileRef.current?.click()}>
           Upload material
         </Button>
         <input
@@ -117,8 +118,8 @@ export function Library() {
         {loading && <Spinner label="Loading your materials…" />}
 
         {error && (
-          <EmptyState title="We hit a snag" message={error}>
-            <Button onClick={reload}>Try again</Button>
+          <EmptyState title="We hit a snag" message={error} icon="error">
+            <Button icon="retry" onClick={reload}>Try again</Button>
           </EmptyState>
         )}
 
@@ -138,7 +139,8 @@ export function Library() {
                 <div>
                   <p className="filename">{m.title}</p>
                   <p className="muted text-sm">
-                    Reading your material… {m.processingProgress ?? 0}%
+                    <Icon name="clock" size="sm" /> Reading your material…{" "}
+                    {m.processingProgress ?? 0}%
                   </p>
                 </div>
               </div>
@@ -159,13 +161,14 @@ export function Library() {
               <div className="processing-row__info">
                 <p className="filename">{m.title}</p>
                 <p className="muted text-sm">
+                  <Icon name="alert" size="sm" />{" "}
                   {m.failureReason ??
                     "We could not read this file. Try exporting it again, or use a different format."}
                 </p>
               </div>
               <div className="row">
                 <Button onClick={() => fileRef.current?.click()}>Try another file</Button>
-                <Button onClick={() => remove(m.id)}>Remove</Button>
+                <Button icon="trash" onClick={() => remove(m.id)}>Remove</Button>
               </div>
             </div>
           ))}
@@ -179,7 +182,9 @@ export function Library() {
                 <Card className="material-card" key={m.id}>
                   <h2 className="material-card__title">{m.title}</h2>
                   <div>
-                    <Tag>{m.fileType}</Tag>
+                    <Tag>
+                      <Icon name="file" size="sm" /> {m.fileType}
+                    </Tag>
                   </div>
                   <p className="muted text-sm">
                     {m.pages} pages · uploaded {formatDate(m.uploadedAt)}

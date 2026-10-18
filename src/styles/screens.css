@@ -56,6 +56,9 @@
   font-weight: var(--weight-bold);
   font-size: var(--font-size-lg);
 }
+.step-card__icon {
+  color: var(--color-text-muted);
+}
 
 /* ===================== Landing: methods ===================== */
 .methods-section {
@@ -98,6 +101,9 @@
 .method-card__name {
   font-size: var(--font-size-xl);
   font-weight: var(--weight-bold);
+}
+.method-card__icon {
+  color: var(--color-text-muted);
 }
 
 /* ===================== Auth asides ===================== */
@@ -448,6 +454,9 @@
 .stat__value {
   font-size: var(--font-size-2xl);
   font-weight: var(--weight-bold);
+}
+.stat__icon {
+  color: var(--color-text-muted);
 }
 .stat__label {
   font-size: var(--font-size-sm);

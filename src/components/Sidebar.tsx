@@ -1,12 +1,13 @@
 import { NavLink } from "react-router-dom";
+import { Icon, type IconName } from "./Icon";
 
-const ITEMS = [
-  { to: "/home", label: "Home" },
-  { to: "/library", label: "Library" },
-  { to: "/practice", label: "Practice" },
-  { to: "/progress", label: "Progress" },
-  { to: "/profile", label: "Profile" },
-  { to: "/settings", label: "Settings" },
+const ITEMS: { to: string; label: string; icon: IconName }[] = [
+  { to: "/home", label: "Home", icon: "home" },
+  { to: "/library", label: "Library", icon: "library" },
+  { to: "/practice", label: "Practice", icon: "practice" },
+  { to: "/progress", label: "Progress", icon: "progress" },
+  { to: "/profile", label: "Profile", icon: "profile" },
+  { to: "/settings", label: "Settings", icon: "settings" },
 ];
 
 export function Sidebar() {
@@ -18,6 +19,7 @@ export function Sidebar() {
       <nav className="sidebar__nav" aria-label="Main">
         {ITEMS.map((item) => (
           <NavLink key={item.to} to={item.to} className="sidebar__link">
+            <Icon name={item.icon} size="md" className="sidebar__icon" />
             {item.label}
           </NavLink>
         ))}

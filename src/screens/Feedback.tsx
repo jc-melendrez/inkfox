@@ -1,16 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import * as api from "../api";
 import type { PartStatus } from "../api/types";
-import { Button, Card, EmptyState, ProgressBar, Spinner, Tag } from "../components";
+import { Button, Card, EmptyState, Icon, ProgressBar, Spinner, Tag, type IconName } from "../components";
 import { useAsync } from "../hooks/useAsync";
 
 const STATUS: Record<
   PartStatus,
-  { label: string; tone: "success" | "warning" | "danger"; icon: string }
+  { label: string; tone: "success" | "warning" | "danger"; icon: IconName }
 > = {
-  strong: { label: "Strong", tone: "success", icon: "✓" },
-  needs_work: { label: "Needs work", tone: "warning", icon: "⚠" },
-  missing: { label: "Missing", tone: "warning", icon: "⚠" },
+  strong: { label: "Strong", tone: "success", icon: "check" },
+  needs_work: { label: "Needs work", tone: "warning", icon: "alert" },
+  missing: { label: "Missing", tone: "warning", icon: "minus" },
 };
 
 export function FeedbackScreen() {
@@ -31,11 +31,12 @@ export function FeedbackScreen() {
       <EmptyState
         title="No feedback yet"
         message={error ?? "Submit your essay first, then we can give you feedback."}
+        icon="error"
       >
         <Button variant="primary" onClick={() => navigate(`/practice/${materialId}/q/${questionId}`)}>
           Back to the editor
         </Button>
-        <Button onClick={reload}>Try again</Button>
+        <Button icon="retry" onClick={reload}>Try again</Button>
       </EmptyState>
     );
   }
@@ -73,7 +74,7 @@ export function FeedbackScreen() {
                 <article className="essay-part" key={`${part.key}-${i}`} id={`part-${i}`} tabIndex={-1}>
                   <div>
                     <Tag tone={status.tone}>
-                      {part.key} · {status.label} {status.icon}
+                      <Icon name={status.icon} size="sm" /> {part.key} · {status.label}
                     </Tag>
                   </div>
                   {part.text ? (
@@ -136,6 +137,7 @@ export function FeedbackScreen() {
             variant="primary"
             size="lg"
             fullWidth
+            icon="practice"
             onClick={() =>
               navigate(`/practice/${materialId}/q/${questionId}?revise=1`)
             }

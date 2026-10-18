@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Button } from "./Button";
+import { Icon } from "./Icon";
 
 interface Props {
   onFiles: (files: File[]) => void;
@@ -37,6 +38,7 @@ export function DropZone({
         handleFiles(e.dataTransfer.files);
       }}
     >
+      <Icon name="upload" size="lg" className="dropzone__icon" />
       <p>{title}</p>
       {hint && <p className="dropzone__hint">{hint}</p>}
       <Button type="button" onClick={() => inputRef.current?.click()}>

@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
+import { Icon, type IconName } from "./Icon";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 
@@ -6,6 +7,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: "md" | "lg";
   fullWidth?: boolean;
+  icon?: IconName;
 }
 
 /** Shared class builder so router <Link>s can look like buttons too. */
@@ -29,6 +31,8 @@ export function Button({
   size = "md",
   fullWidth,
   className,
+  icon,
+  children,
   type = "button",
   ...rest
 }: Props) {
@@ -37,6 +41,9 @@ export function Button({
       type={type}
       className={btnClass(variant, { size, fullWidth, className })}
       {...rest}
-    />
+    >
+      {icon && <Icon name={icon} size="sm" />}
+      {children}
+    </button>
   );
 }

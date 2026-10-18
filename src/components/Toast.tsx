@@ -1,6 +1,13 @@
 import type { ReactNode } from "react";
+import { Icon, type IconName } from "./Icon";
 
 type Tone = "info" | "success" | "error";
+
+const TONE_ICON: Record<Tone, IconName> = {
+  info: "info",
+  success: "success",
+  error: "error",
+};
 
 export interface ToastItem {
   id: number;
@@ -16,6 +23,7 @@ interface Props {
 export function Toast({ toast, onDismiss }: Props) {
   return (
     <div className={`toast toast--${toast.tone}`} role="status">
+      <Icon name={TONE_ICON[toast.tone]} size="sm" className="toast__icon" />
       <span>{toast.message}</span>
       <button
         type="button"
@@ -23,7 +31,7 @@ export function Toast({ toast, onDismiss }: Props) {
         aria-label="Dismiss message"
         onClick={() => onDismiss(toast.id)}
       >
-        ×
+        <Icon name="close" size="sm" />
       </button>
     </div>
   );

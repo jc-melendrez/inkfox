@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Icon } from "./Icon";
 
 interface Props {
   label?: string;
@@ -24,11 +25,13 @@ export function Field({ label, help, error, htmlFor, hideLabel, children }: Prop
       {children}
       {error ? (
         <p className="field__error" id={`${htmlFor}-error`}>
-          {error}
+          <Icon name="error" size="sm" />
+          <span>{error}</span>
         </p>
       ) : help ? (
         <p className="field__help" id={`${htmlFor}-help`}>
-          {help}
+          <Icon name="info" size="sm" />
+          <span>{help}</span>
         </p>
       ) : null}
     </div>

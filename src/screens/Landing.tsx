@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { Tag } from "../components";
+import { Icon, Tag, type IconName } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { METHOD_PARTS, METHODS } from "../lib/methods";
 
-const STEPS = [
-  { num: "1. Upload", text: "Drop in your learning material." },
-  { num: "2. Write", text: "Answer questions using a method." },
-  { num: "3. Revise", text: "Improve with specific feedback." },
+const STEPS: { num: string; text: string; icon: IconName }[] = [
+  { num: "1. Upload", text: "Drop in your learning material.", icon: "upload" },
+  { num: "2. Write", text: "Answer questions using a method.", icon: "practice" },
+  { num: "3. Revise", text: "Improve with specific feedback.", icon: "retry" },
 ];
 
 const METHOD_CARDS = METHODS.map((m) => ({
@@ -18,6 +18,7 @@ const METHOD_CARDS = METHODS.map((m) => ({
       ? "A friendly, four-step structure for your very first essays."
       : "Open each paragraph with a full topic sentence instead of a point.",
   beginner: m.key === "PEEL",
+  icon: (m.key === "PEEL" ? "list" : "align") as IconName,
 }));
 
 export function Landing() {
@@ -74,6 +75,7 @@ export function Landing() {
         <section className="steps" id="how-it-works" aria-label="How it works">
           {STEPS.map((step) => (
             <div className="step-card" key={step.num}>
+              <Icon name={step.icon} size="md" className="step-card__icon" />
               <span className="step-card__num">{step.num}</span>
               <span className="muted">{step.text}</span>
             </div>
@@ -86,6 +88,7 @@ export function Landing() {
             {METHOD_CARDS.map((m) => (
               <div className="method-card" key={m.key}>
                 <div className="method-card__head">
+                  <Icon name={m.icon} size="md" className="method-card__icon" />
                   <h3 className="method-card__name">{m.name}</h3>
                   {m.beginner && <Tag tone="accent">Great for beginners</Tag>}
                 </div>

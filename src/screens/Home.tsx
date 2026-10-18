@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import * as api from "../api";
-import { Button, Card, EmptyState, ProgressBar, Spinner } from "../components";
+import { Button, Card, EmptyState, Icon, ProgressBar, Spinner } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { useAsync } from "../hooks/useAsync";
 import { relativeDay } from "../lib/format";
@@ -18,8 +18,9 @@ export function Home() {
   if (loading) return <Spinner label="Loading your dashboard…" />;
   if (error || !progress.data || !profile.data || !materials.data) {
     return (
-      <EmptyState title="We could not load your dashboard" message={error ?? undefined}>
+      <EmptyState title="We could not load your dashboard" message={error ?? undefined} icon="error">
         <Button
+          icon="retry"
           onClick={() => {
             progress.reload();
             profile.reload();
@@ -43,7 +44,7 @@ export function Home() {
           <h1 className="page-title">Welcome back{user ? `, ${user.name.split(" ")[0]}` : ""}!</h1>
           <p className="muted">{profile.data.stats.dayStreak}-day streak. Keep it going.</p>
         </div>
-        <Button onClick={() => navigate("/library")}>Upload material</Button>
+        <Button icon="upload" onClick={() => navigate("/library")}>Upload material</Button>
       </div>
 
       <div className="stack">
@@ -71,7 +72,9 @@ export function Home() {
 
         <div className="home-grid">
           <Card>
-            <h2 className="card__heading">Method mastery</h2>
+            <h2 className="card__heading">
+              <Icon name="progress" size="sm" /> Method mastery
+            </h2>
             <div className="bar-list">
               {methods.map((m) => (
                 <div key={m.method}>
@@ -95,7 +98,9 @@ export function Home() {
           </Card>
 
           <Card>
-            <h2 className="card__heading">Recent materials</h2>
+            <h2 className="card__heading">
+              <Icon name="library" size="sm" /> Recent materials
+            </h2>
             <ul className="plain-list">
               {recent.map((m) => (
                 <li className="plain-list__row" key={m.id}>

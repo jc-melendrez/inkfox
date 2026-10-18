@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import type { UserRole } from "../api/types";
-import { Button, Card, Checkbox, Input, Select } from "../components";
+import { Button, Card, Checkbox, Icon, Input, Select } from "../components";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { AuthLayout } from "../layouts/AuthLayout";
@@ -93,6 +93,7 @@ export function SignUp() {
               aria-pressed={showPassword}
               onClick={() => setShowPassword((v) => !v)}
             >
+              <Icon name={showPassword ? "eyeOff" : "eye"} size="sm" />
               {showPassword ? "Hide password" : "Show password"}
             </button>
           </div>

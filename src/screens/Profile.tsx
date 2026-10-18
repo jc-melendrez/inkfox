@@ -8,6 +8,7 @@ import {
   Card,
   ConfirmDialog,
   EmptyState,
+  Icon,
   Input,
   Modal,
   Select,
@@ -52,8 +53,8 @@ export function ProfileScreen() {
   if (loading) return <Spinner label="Loading your profile…" />;
   if (error || !data) {
     return (
-      <EmptyState title="We could not load your profile" message={error ?? undefined}>
-        <Button onClick={reload}>Try again</Button>
+      <EmptyState title="We could not load your profile" message={error ?? undefined} icon="error">
+        <Button icon="retry" onClick={reload}>Try again</Button>
       </EmptyState>
     );
   }
@@ -121,20 +122,25 @@ export function ProfileScreen() {
         <div className="stack">
           <div className="stat-grid">
             <Card className="stat">
+              <Icon name="flame" size="md" className="stat__icon" />
               <span className="stat__value">{data.stats.dayStreak}</span>
               <span className="stat__label">Day streak</span>
             </Card>
             <Card className="stat">
+              <Icon name="progress" size="md" className="stat__icon" />
               <span className="stat__value">{data.stats.essaysWritten}</span>
               <span className="stat__label">Essays written</span>
             </Card>
             <Card className="stat">
+              <Icon name="layers" size="md" className="stat__icon" />
               <span className="stat__value">{data.stats.methodsTried}</span>
               <span className="stat__label">Methods tried</span>
             </Card>
           </div>
           <Card>
-            <h2 className="card__heading">Milestones</h2>
+            <h2 className="card__heading">
+              <Icon name="trophy" size="sm" /> Milestones
+            </h2>
             <div className="milestone-grid">
               {data.milestones.map((m) => (
                 <span

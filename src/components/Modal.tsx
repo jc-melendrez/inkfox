@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
+import { Icon } from "./Icon";
 
 interface Props {
   open: boolean;
@@ -29,7 +30,17 @@ export function Modal({ open, onClose, title, children }: Props) {
       }}
     >
       <div className="modal__body">
-        <h2 className="modal__title">{title}</h2>
+        <div className="modal__head">
+          <h2 className="modal__title">{title}</h2>
+          <button
+            type="button"
+            className="modal__close"
+            aria-label="Close"
+            onClick={onClose}
+          >
+            <Icon name="close" size="md" />
+          </button>
+        </div>
         {children}
       </div>
     </dialog>

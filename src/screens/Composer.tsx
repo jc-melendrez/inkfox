@@ -7,6 +7,7 @@ import {
   Card,
   Checkbox,
   EmptyState,
+  Icon,
   Spinner,
   Tag,
   Textarea,
@@ -36,8 +37,8 @@ function ResolveCurrent({ materialId }: { materialId: string }) {
   if (loading) return <Spinner label="Finding your next question…" />;
   if (error) {
     return (
-      <EmptyState title="We hit a snag" message={error}>
-        <Button onClick={reload}>Try again</Button>
+      <EmptyState title="We hit a snag" message={error} icon="error">
+        <Button icon="retry" onClick={reload}>Try again</Button>
       </EmptyState>
     );
   }
@@ -103,8 +104,8 @@ function ComposerEditor({
   if (loading) return <Spinner label="Opening your question…" />;
   if (error || !question) {
     return (
-      <EmptyState title="We could not open that question" message={error ?? undefined}>
-        <Button onClick={reload}>Try again</Button>
+      <EmptyState title="We could not open that question" message={error ?? undefined} icon="error">
+        <Button icon="retry" onClick={reload}>Try again</Button>
       </EmptyState>
     );
   }
@@ -152,6 +153,7 @@ function ComposerEditor({
         </div>
         <div className="composer-top__actions">
           <Button onClick={toggleTimer} aria-pressed={timer.running}>
+            <Icon name="timer" size="sm" />
             {timer.running ? (
               <>
                 <span className="timer">{formatClock(timer.secondsLeft)}</span>
@@ -161,7 +163,9 @@ function ComposerEditor({
               "Timer: Off"
             )}
           </Button>
-          <Button onClick={pauseAndSave}>Pause and save</Button>
+          <Button icon="pause" onClick={pauseAndSave}>
+            Pause and save
+          </Button>
         </div>
       </div>
 
@@ -169,7 +173,9 @@ function ComposerEditor({
         <p className="question-card__text">{question.text}</p>
         <div className="row row--wrap">
           <details>
-            <summary className="btn btn--secondary">Show source passage</summary>
+            <summary className="btn btn--secondary">
+              <Icon name="chevron" size="sm" /> Show source passage
+            </summary>
             <p className="source-passage">{question.sourcePassage}</p>
           </details>
           <span className="muted text-sm">
@@ -229,13 +235,15 @@ function ComposerEditor({
           {!tipDismissed && (
             <div className="tip-box">
               <div className="row row--between">
-                <strong>Tip</strong>
+                <strong>
+                  <Icon name="tip" size="sm" /> Tip
+                </strong>
                 <button
                   type="button"
                   className="link-button"
                   onClick={() => setTipDismissed(true)}
                 >
-                  Dismiss
+                  <Icon name="close" size="sm" /> Dismiss
                 </button>
               </div>
               <p className="muted">

@@ -27,7 +27,11 @@ export function ConfirmDialog({
         <div>{message}</div>
         <div className="modal__actions">
           <Button onClick={onClose}>Cancel</Button>
-          <Button variant={danger ? "danger" : "primary"} onClick={onConfirm}>
+          <Button
+            variant={danger ? "danger" : "primary"}
+            icon={danger ? "trash" : "check"}
+            onClick={onConfirm}
+          >
             {confirmLabel}
           </Button>
         </div>
