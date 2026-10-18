@@ -1,0 +1,100 @@
+:root {
+  /* ---- neutral scale ---- */
+  --gray-0: #ffffff;
+  --gray-25: #faf9f7;
+  --gray-50: #f4f3f0;
+  --gray-100: #ecebe7;
+  --gray-200: #dcdad4;
+  --gray-300: #c3c0b8;
+  --gray-400: #8f8a80;
+  --gray-500: #6b665c;
+  --gray-600: #5b5750;
+  --gray-700: #403d38;
+  --gray-800: #2b2925;
+  --gray-900: #1b1a17;
+
+  /* ---- single accent (terracotta) ---- */
+  --accent-500: #b5431a;
+  --accent-600: #9a3814;
+  --accent-700: #7d2d10;
+  --accent-soft: #fbe7dc;
+  --accent-soft-border: #e7c1ac;
+
+  /* ---- semantic ---- */
+  --color-bg: var(--gray-25);
+  --color-surface: var(--gray-0);
+  --color-surface-muted: var(--gray-50);
+  --color-border: var(--gray-200);
+  --color-border-strong: var(--gray-400);
+  --color-text: var(--gray-900);
+  --color-text-muted: var(--gray-500);
+  --color-accent: var(--accent-500);
+  --color-accent-hover: var(--accent-600);
+  --color-accent-active: var(--accent-700);
+  --color-accent-contrast: #ffffff;
+  --color-accent-soft-bg: var(--accent-soft);
+  --color-accent-soft-border: var(--accent-soft-border);
+  --color-success: #2c6134;
+  --color-success-bg: #e5f0e6;
+  --color-warning: #7f5300;
+  --color-warning-bg: #f8eed6;
+  --color-danger: #9c261d;
+  --color-danger-bg: #f8e5e3;
+  --color-focus: #1f6feb;
+
+  /* ---- typography ---- */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.375rem;
+  --font-size-2xl: 1.75rem;
+  --font-size-3xl: 2.25rem;
+  --line-tight: 1.2;
+  --line-normal: 1.5;
+  --line-relaxed: 1.7;
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- spacing ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 2.5rem;
+  --space-10: 3.5rem;
+  --space-12: 4.5rem;
+
+  /* ---- radii ---- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* ---- shadows ---- */
+  --shadow-sm: 0 1px 2px rgba(27, 26, 23, 0.06);
+  --shadow-md: 0 4px 12px rgba(27, 26, 23, 0.08);
+  --shadow-lg: 0 12px 32px rgba(27, 26, 23, 0.14);
+
+  /* ---- layout ---- */
+  --sidebar-width: 224px;
+  --content-max: 1440px;
+  --control-height: 2.5rem;
+  --control-height-lg: 3rem;
+}
+
+/* Text size is user-adjustable from Settings; everything is rem-based. */
+html[data-text-size="small"] {
+  font-size: 15px;
+}
+html[data-text-size="medium"] {
+  font-size: 16px;
+}
+html[data-text-size="large"] {
+  font-size: 18px;
+}
