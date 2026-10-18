@@ -119,6 +119,7 @@ class TokenLifecycleTests(AuthTestCase):
     def test_me_without_token_is_null(self):
         response = self.client.get("/api/auth/me")
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content, b"null")
         self.assertIsNone(response.json())
 
     def test_me_with_token_returns_user(self):
@@ -136,6 +137,7 @@ class TokenLifecycleTests(AuthTestCase):
     def test_logout_deletes_token(self):
         response = self.client.post("/api/auth/logout", **self.auth(self.token.key))
         self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b"")
         self.assertFalse(Token.objects.filter(user=self.user).exists())
 
     def test_protected_endpoint_requires_token(self):
@@ -187,6 +189,7 @@ class ProfileTests(AuthTestCase):
             **self.auth(self.token.key),
         )
         self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b"")
         new_token = response.headers["X-Auth-Token"]
         self.assertNotEqual(new_token, self.token.key)
         # old token no longer works
@@ -240,6 +243,7 @@ class AccountLifecycleTests(AuthTestCase):
         token = Token.objects.create(user=user)
         response = self.client.delete("/api/account", **self.auth(token.key))
         self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b"")
         self.assertFalse(User.objects.filter(pk=user.pk).exists())
 
     def test_export_returns_json_attachment(self):

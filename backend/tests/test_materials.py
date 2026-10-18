@@ -192,6 +192,7 @@ class DeleteAndCancelTests(MaterialTestCase):
         )
         response = self.client.post(f"/api/materials/{material.id}/cancel")
         self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b"")
         self.assertFalse(Material.objects.filter(pk=material.pk).exists())
 
     def test_delete_removes_material(self):
@@ -200,4 +201,5 @@ class DeleteAndCancelTests(MaterialTestCase):
         )
         response = self.client.delete(f"/api/materials/{material.id}")
         self.assertEqual(response.status_code, 204)
+        self.assertEqual(response.content, b"")
         self.assertFalse(Material.objects.filter(pk=material.pk).exists())
