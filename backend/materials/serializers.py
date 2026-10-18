@@ -22,6 +22,7 @@ class MaterialSerializer(serializers.ModelSerializer):
             "questions_done",
             "status",
             "processing_progress",
+            "failure_reason",
         ]
 
     def get_question_count(self, material):

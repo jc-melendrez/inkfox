@@ -10,8 +10,14 @@ from rest_framework import serializers
 
 EXTENSION_TO_TYPE = {".pdf": "PDF", ".docx": "DOCX", ".txt": "TXT"}
 
+POWERPOINT_EXTENSIONS = {".ppt", ".pptx"}
+
 SIZE_MESSAGE = "That file is larger than 10 MB. Try a smaller one."
 TYPE_MESSAGE = "We can only read PDF, DOCX or TXT files. Please choose one of those."
+POWERPOINT_MESSAGE = (
+    "PowerPoint files aren't supported yet. Save your slides as a DOCX, TXT, "
+    "or a PDF that has selectable text."
+)
 CONTENT_MESSAGE = "That file doesn't look like a valid {type}. Please check it and try again."
 
 
@@ -23,6 +29,8 @@ def validate_upload(upload):
     name = upload.name or ""
     suffix = Path(name).suffix.lower()
 
+    if suffix in POWERPOINT_EXTENSIONS:
+        raise serializers.ValidationError(POWERPOINT_MESSAGE)
     if suffix not in EXTENSION_TO_TYPE:
         raise serializers.ValidationError(TYPE_MESSAGE)
     if upload.size > settings.MAX_MATERIAL_SIZE:

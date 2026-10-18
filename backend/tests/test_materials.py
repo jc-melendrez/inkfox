@@ -12,7 +12,7 @@ from rest_framework.test import APIClient, APITestCase
 from accounts.models import User
 from common.choices import MaterialStatus
 from materials.models import Material
-from materials.processing import process_material
+from materials.processing import NO_TEXT_REASON, process_material
 from questions.models import Question
 
 PASSWORD = "correct-horse-9"
@@ -72,6 +72,20 @@ class UploadTests(MaterialTestCase):
             format="multipart",
         )
         self.assertEqual(response.status_code, 400)
+
+    def test_upload_rejects_powerpoint_with_friendly_message(self):
+        for name in ("slides.ppt", "slides.pptx"):
+            with self.subTest(name=name):
+                response = self.client.post(
+                    "/api/materials",
+                    {"file": upload(name, b"PK\x03\x04slides")},
+                    format="multipart",
+                )
+                self.assertEqual(response.status_code, 400)
+                self.assertIn(
+                    "PowerPoint files aren't supported yet",
+                    response.json()["message"],
+                )
 
     def test_upload_rejects_fake_pdf(self):
         response = self.client.post(
@@ -135,6 +149,15 @@ class ProcessingTests(MaterialTestCase):
         material.refresh_from_db()
         self.assertEqual(material.status, MaterialStatus.READY)
         self.assertIn("Hello from a docx document", material.extracted_text)
+
+    def test_process_without_text_records_friendly_reason(self):
+        material = self._create("blank", b"   \n\t  ")
+        process_material(material.id)
+        material.refresh_from_db()
+        self.assertEqual(material.status, MaterialStatus.FAILED)
+        self.assertEqual(material.failure_reason, NO_TEXT_REASON)
+        response = self.client.get(f"/api/materials/{material.id}")
+        self.assertEqual(response.json()["failureReason"], NO_TEXT_REASON)
 
 
 class SampleTests(MaterialTestCase):

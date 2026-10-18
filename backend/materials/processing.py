@@ -7,6 +7,7 @@ server restart or the app scales out, replace this with Celery/RQ.
 import logging
 import threading
 
+from django.conf import settings
 from django.db import connection
 
 from common.choices import MaterialStatus
@@ -16,7 +17,29 @@ from .models import Material
 
 logger = logging.getLogger(__name__)
 
-FRIENDLY_FAILURE = "We couldn't read that file. Try re-exporting it and uploading again."
+NO_TEXT_REASON = (
+    "We couldn't find readable text. It may be a scan or image-only slides. "
+    "Try a PDF where you can select the text, or a DOCX/TXT."
+)
+READ_ERROR_REASON = "We couldn't read that file. Try re-exporting it and uploading again."
+
+_MAX_LOG_CHARS = 200
+
+
+class NoReadableText(Exception):
+    """Raised when a supported file yields no usable text."""
+
+
+def _safe_error(exc):
+    """A short, single-line, path-free description for logs.
+
+    Only the exception class plus a capped message are exposed. File contents
+    and extracted text are never logged, and the stored path (a random id) is
+    redacted regardless.
+    """
+    message = " ".join(str(exc).split()).replace(str(settings.MEDIA_ROOT), "<media>")
+    message = message[:_MAX_LOG_CHARS]
+    return f"{exc.__class__.__name__}: {message}" if message else exc.__class__.__name__
 
 
 def start_processing(material_id):
@@ -29,6 +52,18 @@ def _set(material, **fields):
     for key, value in fields.items():
         setattr(material, key, value)
     material.save(update_fields=list(fields))
+
+
+def _fail(material, reason, exc):
+    logger.warning("Material %s processing failed: %s", material.id, _safe_error(exc))
+    try:
+        _set(
+            material,
+            status=MaterialStatus.FAILED,
+            failure_reason=reason,
+        )
+    except Exception:
+        pass
 
 
 def process_material(material_id):
@@ -46,7 +81,7 @@ def process_material(material_id):
             processing_progress=55,
         )
         if not text:
-            raise ValueError("No readable text found.")
+            raise NoReadableText()
 
         # Question generation is optional: if AI is off or busy, the material
         # still becomes ready and questions can be requested later from the UI.
@@ -67,15 +102,9 @@ def process_material(material_id):
             processing_progress=100,
             failure_reason="",
         )
+    except NoReadableText as exc:
+        _fail(material, NO_TEXT_REASON, exc)
     except Exception as exc:  # noqa: BLE001 - any failure fails the material
-        logger.warning("Material %s processing failed: %s", material_id, exc.__class__.__name__)
-        try:
-            _set(
-                material,
-                status=MaterialStatus.FAILED,
-                failure_reason=FRIENDLY_FAILURE,
-            )
-        except Exception:
-            pass
+        _fail(material, READ_ERROR_REASON, exc)
     finally:
         connection.close()
