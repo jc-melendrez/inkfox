@@ -448,7 +448,9 @@ dialog.modal::backdrop {
 /* ===================== Wordmark ===================== */
 .wordmark {
   font-family: var(--font-heading);
+  font-size: var(--font-size-wordmark);
   font-weight: var(--weight-bold);
+  line-height: var(--line-tight);
   color: var(--color-accent);
   letter-spacing: 0.01em;
 }
