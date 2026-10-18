@@ -288,6 +288,7 @@
 }
 .editor__textarea {
   min-height: 26rem;
+  font-family: var(--font-essay);
   font-size: var(--font-size-lg);
   line-height: var(--line-relaxed);
 }
@@ -341,6 +342,7 @@
   gap: var(--space-2);
 }
 .essay-part__text {
+  font-family: var(--font-essay);
   font-size: var(--font-size-lg);
   line-height: var(--line-relaxed);
 }

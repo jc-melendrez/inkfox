@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: var(--control-height);
+  min-width: var(--control-min-width);
+  min-height: var(--control-min-height);
   padding: 0 var(--space-4);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
@@ -12,10 +13,10 @@
   font-weight: var(--weight-semibold);
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
 }
 .btn--lg {
-  min-height: var(--control-height-lg);
+  min-height: var(--control-min-height-lg);
   padding: 0 var(--space-5);
 }
 .btn--full {
@@ -84,12 +85,12 @@
 .select,
 .textarea {
   width: 100%;
-  min-height: var(--control-height);
+  min-height: var(--control-min-height);
   padding: var(--space-2) var(--space-3);
   font: inherit;
   color: var(--color-text);
   background: var(--color-surface);
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border-control);
   border-radius: var(--radius-md);
 }
 .textarea {
@@ -109,15 +110,16 @@
 /* ===================== Checkbox ===================== */
 .checkbox {
   display: inline-flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-2);
+  min-height: var(--control-min-height);
   cursor: pointer;
   font-size: var(--font-size-sm);
 }
 .checkbox input {
-  width: 1.15rem;
-  height: 1.15rem;
-  margin: 0.15rem 0 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
   accent-color: var(--color-accent);
   flex: none;
 }
@@ -128,7 +130,7 @@
   align-items: flex-start;
   gap: var(--space-3);
   padding: var(--space-4);
-  border: 1px solid var(--color-border-strong);
+  border: 2px solid var(--color-border-control);
   border-radius: var(--radius-md);
   background: var(--color-surface);
   cursor: pointer;
@@ -166,6 +168,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
+  box-shadow: var(--shadow-card);
 }
 .card--accent-soft {
   background: var(--color-accent-soft-bg);
@@ -202,7 +205,7 @@ details > summary.btn::-webkit-details-marker {
   height: 100%;
   background: var(--color-accent);
   border-radius: var(--radius-pill);
-  transition: width 0.3s ease;
+  transition: width 0.18s ease;
 }
 
 /* ===================== Tag ===================== */
@@ -261,10 +264,10 @@ dialog.modal {
   border-radius: var(--radius-lg);
   padding: 0;
   width: min(32rem, calc(100vw - 2rem));
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-card);
 }
 dialog.modal::backdrop {
-  background: rgba(27, 26, 23, 0.45);
+  background: rgba(31, 42, 68, 0.45);
 }
 .modal__body {
   padding: var(--space-5);
@@ -300,7 +303,6 @@ dialog.modal::backdrop {
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border-strong);
   background: var(--color-surface);
-  box-shadow: var(--shadow-md);
   font-size: var(--font-size-sm);
 }
 .toast--success {
@@ -314,12 +316,17 @@ dialog.modal::backdrop {
 }
 .toast__close {
   margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--control-min-width);
+  min-height: var(--control-min-width);
   background: none;
   border: none;
   cursor: pointer;
   font-size: var(--font-size-lg);
   line-height: 1;
-  padding: 0 var(--space-1);
+  padding: 0;
 }
 
 /* ===================== Sidebar ===================== */
@@ -360,6 +367,7 @@ dialog.modal::backdrop {
 }
 .sidebar__link[aria-current="page"] {
   background: var(--color-accent-soft-bg);
+  box-shadow: inset 3px 0 0 var(--color-accent);
   font-weight: var(--weight-bold);
 }
 
@@ -406,7 +414,7 @@ dialog.modal::backdrop {
   min-height: 9rem;
   padding: var(--space-5);
   text-align: center;
-  border: 2px dashed var(--color-border-strong);
+  border: 2px solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface-muted);
   cursor: pointer;
@@ -454,6 +462,10 @@ dialog.modal::backdrop {
   .spinner__dot {
     animation-duration: 2s;
   }
+  .btn,
+  .progress__fill {
+    transition: none;
+  }
 }
 
 /* ===================== ScoreTrendChart ===================== */
@@ -475,16 +487,16 @@ dialog.modal::backdrop {
 }
 .chart__label {
   fill: var(--color-text-muted);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
 }
 .chart__axis-label {
   fill: var(--color-text-muted);
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: var(--weight-medium);
 }
 .chart__value {
   fill: var(--color-text);
-  font-size: 10px;
+  font-size: var(--font-size-2xs);
   font-weight: var(--weight-semibold);
 }
 
@@ -502,7 +514,6 @@ dialog.modal::backdrop {
   color: var(--color-surface);
   border-radius: var(--radius-pill);
   font-size: var(--font-size-xs);
-  box-shadow: var(--shadow-lg);
 }
 .devbar select {
   font-size: var(--font-size-xs);
