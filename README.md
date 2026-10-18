@@ -147,6 +147,26 @@ token in the `X-Auth-Token` response header.
 | `profile.changePassword` | `POST /api/profile/password` | `{current,new}` | `204` |
 | `profile.downloadMyData` | `GET /api/profile/export` | — | file |
 
+## Deployment
+
+Production runs on a single Ubuntu EC2 instance: Nginx serves the built React app
+and proxies `/api` to Gunicorn (systemd), with SQLite and uploads in a dedicated
+data directory. Full, copy-paste instructions live in **`deploy/README.md`**, with
+config and scripts under `deploy/` (Nginx, systemd, cron, backups, update script,
+frontend build).
+
+Before you start you need:
+
+- an AWS account (free plan/credits) able to launch a `t3.micro` instance;
+- optionally a domain (for HTTPS — not required for an IP-only demo);
+- your AI provider key (e.g. Gemini) — the app also works without one;
+- your laptop with Node 20+ to build the frontend, and `ssh`/`scp`.
+
+Quick shape of it: build the frontend locally with `VITE_API_MODE=real` and upload
+`dist/`, run the backend under Gunicorn as a non-root `foxtutor` user, and keep
+secrets in `/etc/foxtutor/foxtutor.env` (never in the repo). SQLite means one
+instance only; more than one would require PostgreSQL.
+
 ## Accessibility notes (WCAG AA)
 
 - Real `<button>`/`<a>`/`<label>`; native `<dialog>` (focus trap + Esc), native

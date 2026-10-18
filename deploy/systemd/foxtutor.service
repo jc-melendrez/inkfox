@@ -1,0 +1,39 @@
+# FoxTutor (Gunicorn) systemd unit. Installed at /etc/systemd/system/foxtutor.service.
+# Enable/start:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now foxtutor
+#   systemctl status foxtutor
+# Logs (journald): journalctl -u foxtutor -e
+
+[Unit]
+Description=FoxTutor (Gunicorn)
+After=network.target
+
+[Service]
+Type=simple
+User=foxtutor
+Group=foxtutor
+WorkingDirectory=/srv/foxtutor/backend
+EnvironmentFile=/etc/foxtutor/foxtutor.env
+
+# 120s must stay above AI_TIMEOUT * (AI_MAX_RETRIES + 1) so a slow AI call ends
+# with the app's friendly error instead of a Gunicorn worker kill.
+ExecStart=/srv/foxtutor/backend/.venv/bin/gunicorn config.wsgi:application \
+    --bind 127.0.0.1:8000 \
+    --workers 2 \
+    --timeout 120 \
+    --access-logfile - \
+    --error-logfile -
+
+Restart=on-failure
+RestartSec=3
+
+# Hardening. The app only needs to write the data directory.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/foxtutor
+
+[Install]
+WantedBy=multi-user.target

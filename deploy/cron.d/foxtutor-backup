@@ -1,0 +1,8 @@
+# Daily FoxTutor backup. Install:
+#   sudo cp deploy/cron.d/foxtutor-backup /etc/cron.d/foxtutor-backup
+#   sudo chmod 644 /etc/cron.d/foxtutor-backup
+# Keeps 3 days on the server; copy the latest to your laptop before the free
+# plan ends (see deploy/README.md).
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+15 3 * * * foxtutor /srv/foxtutor/deploy/backup.sh >> /var/lib/foxtutor/backup.log 2>&1

@@ -11,3 +11,7 @@ __pycache__/
 backend/db.sqlite3
 backend/db.sqlite3-*
 backend/media/
+backend/staticfiles/
+
+# --- Deploy ---
+deploy/foxtutor.env

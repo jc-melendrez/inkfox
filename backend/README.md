@@ -10,6 +10,8 @@ setting `VITE_API_MODE=real`.
 - Wire format: camelCase JSON, string IDs (`djangorestframework-camel-case`).
 - AI: provider-agnostic (`ai/`); works fully offline when no provider is configured.
 
+Deployment (single EC2 instance, Nginx + Gunicorn + SQLite): see `../deploy/README.md`.
+
 ## Setup
 
 ```powershell

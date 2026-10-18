@@ -1,0 +1,5 @@
+# Deploy-only dependencies (Linux server). Install together with the backend set:
+#   backend/.venv/bin/pip install -r backend/requirements.txt -r deploy/requirements.txt
+-r ../backend/requirements.txt
+# WSGI server. (Verify the latest 23.x at deploy time: pip index versions gunicorn)
+gunicorn==23.0.0
