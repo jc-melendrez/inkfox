@@ -78,14 +78,21 @@ export function Library() {
   }
 
   async function newQuestions(material: Material) {
-    const created = await api.questions.generateQuestions(material.id);
-    setData(
-      (data ?? []).map((m) =>
-        m.id === material.id ? { ...m, questionCount: m.questionCount + created.length } : m,
-      ),
-    );
-    notify(`${created.length} new questions ready.`, "success");
-    navigate(`/practice/${material.id}`);
+    try {
+      const created = await api.questions.generateQuestions(material.id);
+      setData(
+        (data ?? []).map((m) =>
+          m.id === material.id ? { ...m, questionCount: m.questionCount + created.length } : m,
+        ),
+      );
+      notify(`${created.length} new questions ready.`, "success");
+      navigate(`/practice/${material.id}`);
+    } catch (err) {
+      notify(
+        err instanceof ApiError ? err.message : "We could not create questions.",
+        "error",
+      );
+    }
   }
 
   return (
@@ -190,9 +197,11 @@ export function Library() {
                     {m.pages} pages · uploaded {formatDate(m.uploadedAt)}
                   </p>
                   <p className="text-sm">
-                    {m.questionsDone === 0
-                      ? "Not started"
-                      : `${m.questionsDone} of ${m.questionCount} questions done`}
+                    {m.questionCount === 0
+                      ? "No questions yet"
+                      : m.questionsDone === 0
+                        ? "Not started"
+                        : `${m.questionsDone} of ${m.questionCount} questions done`}
                   </p>
                   <ProgressBar
                     value={m.questionsDone}
@@ -205,6 +214,10 @@ export function Library() {
                         <Button onClick={() => newQuestions(m)}>New questions</Button>
                         <Button onClick={() => navigate(`/practice/${m.id}`)}>Review</Button>
                       </>
+                    ) : m.questionCount === 0 ? (
+                      <Button variant="primary" onClick={() => newQuestions(m)}>
+                        Create questions
+                      </Button>
                     ) : (
                       <>
                         <Button onClick={() => navigate(`/practice/${m.id}`)}>

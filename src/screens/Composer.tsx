@@ -55,12 +55,19 @@ function ResolveCurrent({ materialId }: { materialId: string }) {
 }
 
 function AllDone({ materialId }: { materialId: string }) {
+  const navigate = useNavigate();
   const { data } = useAsync(() => api.questions.listQuestions(materialId), [materialId]);
   if (data) {
-    return data.length ? (
-      <Navigate to={`/practice/${materialId}/q/${data[0].id}/feedback`} replace />
-    ) : (
-      <Navigate to="/library" replace />
+    if (data.length) {
+      return <Navigate to={`/practice/${materialId}/q/${data[0].id}/feedback`} replace />;
+    }
+    return (
+      <EmptyState
+        title="No questions yet"
+        message="This material does not have any practice questions yet."
+      >
+        <Button onClick={() => navigate("/library")}>Back to library</Button>
+      </EmptyState>
     );
   }
   return <Spinner label="Opening your review…" />;
