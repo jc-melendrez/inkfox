@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import * as api from "../api";
 import { ApiError } from "../api/client";
@@ -19,6 +19,14 @@ import { useAutosave } from "../hooks/useAutosave";
 import { useTimer } from "../hooks/useTimer";
 import { formatClock, wordCount } from "../lib/format";
 import { METHOD_PARTS } from "../lib/methods";
+
+const MAX_INSTRUCTIONS = 400;
+const INSTRUCTION_SUGGESTIONS = [
+  "Focus on my linking sentences",
+  "Explain grammar simply",
+  "Be more detailed",
+  "Be more direct",
+];
 
 export function Composer() {
   const { materialId, questionId } = useParams();
@@ -67,7 +75,7 @@ function ComposerEditor({
 }) {
   const navigate = useNavigate();
   const { notify } = useToast();
-  const { settings } = useSettings();
+  const { settings, ready } = useSettings();
   const [searchParams] = useSearchParams();
   const revising = searchParams.get("revise") === "1";
 
@@ -80,7 +88,7 @@ function ComposerEditor({
     [questionId],
   );
   const { data: draft } = useAsync(() => api.essays.getDraft(questionId), [questionId]);
-  const { data: priorFeedback } = useAsync(
+  const { data: priorFeedback, loading: priorFeedbackLoading } = useAsync(
     () => api.feedback.getFeedback(questionId),
     [questionId],
   );
@@ -90,6 +98,10 @@ function ComposerEditor({
   const [checks, setChecks] = useState<boolean[]>([false, false, false, false]);
   const [submitting, setSubmitting] = useState(false);
   const [tipDismissed, setTipDismissed] = useState(false);
+  const [instructions, setInstructions] = useState("");
+  const [instructionsSource, setInstructionsSource] = useState<"revision" | "default" | null>(null);
+  const [instructionsSeeded, setInstructionsSeeded] = useState(false);
+  const instructionsDetailsRef = useRef<HTMLDetailsElement>(null);
   const timer = useTimer(settings.timerMinutes, settings.pressureTimer);
 
   useEffect(() => {
@@ -98,6 +110,30 @@ function ComposerEditor({
       setSeeded(true);
     }
   }, [draft, seeded]);
+
+  // Prefill once the editor is mounted and settings (and, when revising, the
+  // previous feedback) have loaded, so the field never flashes empty and collapsed.
+  useEffect(() => {
+    if (loading || instructionsSeeded || !ready) return;
+    if (revising && priorFeedbackLoading) return;
+    const fromRevision = revising ? (priorFeedback?.instructions ?? "").trim() : "";
+    const fromDefault = settings.defaultInstructions.trim();
+    const value = fromRevision || fromDefault;
+    setInstructions(value);
+    if (instructionsDetailsRef.current) {
+      instructionsDetailsRef.current.open = value.length > 0;
+    }
+    setInstructionsSource(fromRevision ? "revision" : fromDefault ? "default" : null);
+    setInstructionsSeeded(true);
+  }, [
+    loading,
+    instructionsSeeded,
+    ready,
+    revising,
+    priorFeedbackLoading,
+    priorFeedback,
+    settings.defaultInstructions,
+  ]);
 
   const saveStatus = useAutosave(content, (v) => api.essays.saveDraft(questionId, v));
 
@@ -123,7 +159,7 @@ function ComposerEditor({
   async function submit() {
     setSubmitting(true);
     try {
-      await api.essays.submitEssay(questionId, content);
+      await api.essays.submitEssay(questionId, content, instructions.trim());
       navigate(`/practice/${materialId}/q/${questionId}/feedback`);
     } catch (err) {
       notify(err instanceof ApiError ? err.message : "We could not read that draft.", "error");
@@ -194,6 +230,55 @@ function ComposerEditor({
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
+
+          <details className="instructions" ref={instructionsDetailsRef}>
+            <summary className="btn btn--secondary">
+              <Icon name="chevron" size="sm" /> Add instructions (optional)
+            </summary>
+            <div className="instructions__body stack">
+              <Textarea
+                label="Your instructions"
+                help={`These tips shape the feedback, but the ${question.method} criteria still apply.`}
+                maxLength={MAX_INSTRUCTIONS}
+                placeholder="e.g. Focus on my linking sentences, and explain grammar simply."
+                value={instructions}
+                onChange={(e) => setInstructions(e.target.value)}
+              />
+              <div className="row row--between">
+                <span className="muted text-sm" aria-live="polite">
+                  {instructions.length}/{MAX_INSTRUCTIONS}
+                </span>
+                {instructionsSource && (
+                  <span className="muted text-sm">
+                    {instructionsSource === "revision"
+                      ? "From your last revision"
+                      : "From your default instructions"}
+                  </span>
+                )}
+              </div>
+              <div className="row row--wrap">
+                {INSTRUCTION_SUGGESTIONS.map((suggestion) => (
+                  <Button
+                    key={suggestion}
+                    variant="secondary"
+                    onClick={() => setInstructions(suggestion)}
+                  >
+                    {suggestion}
+                  </Button>
+                ))}
+                {instructions && (
+                  <button
+                    type="button"
+                    className="link-button"
+                    onClick={() => setInstructions("")}
+                  >
+                    <Icon name="close" size="sm" /> Clear
+                  </button>
+                )}
+              </div>
+            </div>
+          </details>
+
           <div className="editor__meta">
             <span className="muted text-sm">
               {wordCount(content)} words · {savedText}

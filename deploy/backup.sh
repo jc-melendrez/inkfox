@@ -8,6 +8,10 @@ BACKUP_DIR="${BACKUP_DIR:-/var/backups/foxtutor}"
 KEEP_DAYS="${KEEP_DAYS:-3}"
 DB="$DATA_DIR/db.sqlite3"
 
+# Run from a path the service user can always access (cron/manual shells may
+# start in /home/ec2-user, which foxtutor cannot read).
+cd /
+
 stamp="$(date +%Y-%m-%d_%H%M%S)"
 dest="$BACKUP_DIR/$stamp"
 mkdir -p "$dest"
@@ -23,4 +27,4 @@ fi
 # Retention: remove backups older than KEEP_DAYS days.
 find "$BACKUP_DIR" -mindepth 1 -maxdepth 1 -type d -mtime +"$KEEP_DAYS" -exec rm -rf {} +
 
-echo "Backup complete: $dest"
+echo "Redraft backup complete: $dest"

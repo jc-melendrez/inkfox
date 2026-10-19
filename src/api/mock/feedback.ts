@@ -30,6 +30,7 @@ export function buildFeedback(
   content: string,
   method: MethodKey,
   draftNumber: number,
+  instructions = "",
 ): Feedback {
   const sentences = splitSentences(content);
   const slots = METHOD_PARTS[method];
@@ -80,6 +81,7 @@ export function buildFeedback(
     parts,
     strengths,
     improvements,
+    instructions,
   };
 }
 

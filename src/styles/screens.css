@@ -305,6 +305,11 @@
   gap: var(--space-3);
   flex-wrap: wrap;
 }
+.instructions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
 .checklist {
   list-style: none;
   margin: var(--space-3) 0 0;

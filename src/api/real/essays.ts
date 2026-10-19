@@ -12,9 +12,13 @@ export function saveDraft(questionId: string, content: string): Promise<EssayDra
   });
 }
 
-export function submitEssay(questionId: string, content: string): Promise<Feedback> {
+export function submitEssay(
+  questionId: string,
+  content: string,
+  instructions = "",
+): Promise<Feedback> {
   return request<Feedback>(`/questions/${questionId}/essays`, {
     method: "POST",
-    json: { content },
+    json: { content, instructions },
   });
 }

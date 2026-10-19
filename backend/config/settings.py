@@ -1,4 +1,4 @@
-"""Django settings for the FoxTutor backend.
+"""Django settings for the Redraft backend.
 
 Configuration is env-driven (see .env.example). Local dev and the school-project
 deployment use SQLite; setting DATABASE_URL to a Postgres URL switches engines

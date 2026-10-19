@@ -1,4 +1,5 @@
-# FoxTutor (Gunicorn) systemd unit. Installed at /etc/systemd/system/foxtutor.service.
+# Redraft (Gunicorn) systemd unit. Installed at /etc/systemd/system/foxtutor.service.
+# (Server identifiers keep the original project name "foxtutor" on purpose.)
 # Enable/start:
 #   sudo systemctl daemon-reload
 #   sudo systemctl enable --now foxtutor
@@ -6,8 +7,9 @@
 # Logs (journald): journalctl -u foxtutor -e
 
 [Unit]
-Description=FoxTutor (Gunicorn)
-After=network.target
+Description=Redraft (Gunicorn)
+After=network.target redraft-set-ip.service
+Wants=redraft-set-ip.service
 
 [Service]
 Type=simple
@@ -18,6 +20,8 @@ EnvironmentFile=/etc/foxtutor/foxtutor.env
 
 # 120s must stay above AI_TIMEOUT * (AI_MAX_RETRIES + 1) so a slow AI call ends
 # with the app's friendly error instead of a Gunicorn worker kill.
+# If this ever fails with 203/EXEC (SELinux), use the venv interpreter instead:
+#   ExecStart=/srv/foxtutor/backend/.venv/bin/python -m gunicorn config.wsgi:application \
 ExecStart=/srv/foxtutor/backend/.venv/bin/gunicorn config.wsgi:application \
     --bind 127.0.0.1:8000 \
     --workers 2 \

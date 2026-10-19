@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { MethodKey, TextSize } from "../api/types";
-import { Button, Card, Checkbox, Input, Select } from "../components";
+import { Button, Card, Checkbox, Input, Select, Textarea } from "../components";
 import { useSettings } from "../context/SettingsContext";
 import { useToast } from "../context/ToastContext";
 import { METHOD_OPTIONS, TEXT_SIZE_OPTIONS } from "../lib/methods";
@@ -72,6 +72,17 @@ export function SettingsScreen() {
           onChange={(e) => setForm({ ...form, textSize: e.target.value as TextSize })}
           options={TEXT_SIZE_OPTIONS}
         />
+        <Textarea
+          label="Default instructions (optional)"
+          help="Pre-fills the Composer. You can change it for any single essay."
+          maxLength={400}
+          placeholder="e.g. Explain grammar simply and be more direct."
+          value={form.defaultInstructions}
+          onChange={(e) => setForm({ ...form, defaultInstructions: e.target.value })}
+        />
+        <span className="muted text-sm" aria-live="polite">
+          {form.defaultInstructions.length}/400
+        </span>
         <Button variant="primary" fullWidth size="lg" onClick={save} disabled={saving}>
           {saving ? "Saving…" : "Save settings"}
         </Button>

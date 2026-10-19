@@ -110,6 +110,8 @@ export interface Feedback {
   parts: FeedbackPart[];
   strengths: string[];
   improvements: FeedbackImprovement[];
+  /** Learner preferences used for this revision; "" when none were given. */
+  instructions: string;
 }
 
 /* ---------------- Progress ---------------- */
@@ -176,6 +178,7 @@ export interface Settings {
   dailyReminder: boolean;
   weeklySummary: boolean;
   textSize: TextSize;
+  defaultInstructions: string;
 }
 
 /* ---------------- Profile ---------------- */

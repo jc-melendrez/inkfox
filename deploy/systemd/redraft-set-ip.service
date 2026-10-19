@@ -1,0 +1,24 @@
+# Redraft boot-time host sync. Installed at /etc/systemd/system/redraft-set-ip.service.
+# Rewrites ALLOWED_HOSTS / CSRF_TRUSTED_ORIGINS from the instance public IP
+# before Gunicorn starts, so a stop/start needs no manual steps on the server.
+# Enable:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable redraft-set-ip.service
+# Logs: journalctl -u redraft-set-ip -e
+
+[Unit]
+Description=Redraft - sync ALLOWED_HOSTS with the instance public IP
+After=network-online.target
+Wants=network-online.target
+Before=foxtutor.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User=foxtutor
+Group=foxtutor
+ExecStart=/srv/foxtutor/deploy/set-ip.sh
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target

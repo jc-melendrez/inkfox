@@ -17,10 +17,13 @@ const DEFAULTS: Settings = {
   dailyReminder: true,
   weeklySummary: false,
   textSize: "medium",
+  defaultInstructions: "",
 };
 
 interface SettingsApi {
   settings: Settings;
+  /** True once the stored settings have loaded (or failed); gates prefills. */
+  ready: boolean;
   update: (patch: Partial<Settings>) => Promise<Settings>;
 }
 
@@ -28,16 +31,21 @@ const SettingsContext = createContext<SettingsApi | null>(null);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(DEFAULTS);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let alive = true;
     api.settings
       .getSettings()
       .then((s) => {
-        if (alive) setSettings(s);
+        // Spread over DEFAULTS so storage written before a field existed stays valid.
+        if (alive) setSettings({ ...DEFAULTS, ...s });
       })
       .catch(() => {
         /* keep defaults */
+      })
+      .finally(() => {
+        if (alive) setReady(true);
       });
     return () => {
       alive = false;
@@ -54,7 +62,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     return next;
   }, []);
 
-  const value = useMemo(() => ({ settings, update }), [settings, update]);
+  const value = useMemo(() => ({ settings, ready, update }), [settings, ready, update]);
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }
 

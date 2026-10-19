@@ -1,4 +1,4 @@
-# Build the FoxTutor frontend for production on your laptop (Windows) and print
+# Build the Redraft frontend for production on your laptop (Windows) and print
 # the upload commands. Run:  powershell -ExecutionPolicy Bypass -File deploy\build-frontend.ps1
 # Vite gives already-set environment variables highest priority, so these win over
 # any .env.local (which defaults to mock mode).
@@ -23,6 +23,7 @@ Write-Host ""
 Write-Host "Built: $repo\dist" -ForegroundColor Green
 Write-Host ""
 Write-Host "Upload it to the server (replace <PUBLIC_IP>):"
-Write-Host "  ssh ubuntu@<PUBLIC_IP> `"rm -rf /srv/foxtutor/frontend/dist`""
-Write-Host "  scp -r `"$repo\dist`" ubuntu@<PUBLIC_IP>:/srv/foxtutor/frontend/"
-Write-Host "  ssh ubuntu@<PUBLIC_IP> `"chmod -R a+rX /srv/foxtutor/frontend/dist`""
+Write-Host "  ssh ec2-user@<PUBLIC_IP> `"rm -rf /srv/foxtutor/frontend/dist`""
+Write-Host "  scp -r `"$repo\dist`" ec2-user@<PUBLIC_IP>:/srv/foxtutor/frontend/"
+Write-Host "  ssh ec2-user@<PUBLIC_IP> `"chmod -R a+rX /srv/foxtutor/frontend/dist`""
+Write-Host "  ssh ec2-user@<PUBLIC_IP> `"sudo restorecon -R /srv/foxtutor/frontend/dist`""

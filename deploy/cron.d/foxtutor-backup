@@ -1,8 +1,9 @@
-# Daily FoxTutor backup. Install:
+# Daily Redraft backup. Install:
 #   sudo cp deploy/cron.d/foxtutor-backup /etc/cron.d/foxtutor-backup
 #   sudo chmod 644 /etc/cron.d/foxtutor-backup
 # Keeps 3 days on the server; copy the latest to your laptop before the free
 # plan ends (see deploy/README.md).
+# Bash is invoked explicitly so the script does not need the executable bit.
 SHELL=/bin/bash
 PATH=/usr/local/bin:/usr/bin:/bin
-15 3 * * * foxtutor /srv/foxtutor/deploy/backup.sh >> /var/lib/foxtutor/backup.log 2>&1
+15 3 * * * foxtutor cd / && /bin/bash /srv/foxtutor/deploy/backup.sh >> /var/lib/foxtutor/backup.log 2>&1

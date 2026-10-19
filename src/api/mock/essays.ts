@@ -33,7 +33,11 @@ function levelFor(percent: number): { level: number; levelLabel: string } {
   return { level: Math.min(5, Math.floor(percent / 20) + 1), levelLabel };
 }
 
-export function submitEssay(questionId: string, content: string): Promise<Feedback> {
+export function submitEssay(
+  questionId: string,
+  content: string,
+  instructions = "",
+): Promise<Feedback> {
   const db = getDB();
   const question = db.questions.find((q) => q.id === questionId);
   if (!question) return Promise.reject(new ApiError("We could not find that question."));
@@ -41,8 +45,17 @@ export function submitEssay(questionId: string, content: string): Promise<Feedba
     return Promise.reject(new ApiError("Write a little first, then submit for feedback."));
   }
 
+  // Offline/sample mode ignores the instructions for the feedback itself,
+  // but remembers them so a revision can still prefill them.
+  const remembered = instructions.trim();
   const history = db.feedbackByQuestion[questionId] ?? [];
-  const feedback = buildFeedback(questionId, content, question.method, history.length + 1);
+  const feedback = buildFeedback(
+    questionId,
+    content,
+    question.method,
+    history.length + 1,
+    remembered,
+  );
 
   db.drafts[questionId] = {
     id: db.drafts[questionId]?.id ?? `d-${questionId}`,

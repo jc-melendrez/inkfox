@@ -199,6 +199,7 @@ export function seed(): MockDB {
             message: "add a closing sentence back to the question.",
           },
         ],
+        instructions: "",
       },
     ],
   };
@@ -240,6 +241,7 @@ export function seed(): MockDB {
       dailyReminder: true,
       weeklySummary: false,
       textSize: "medium",
+      defaultInstructions: "",
     },
     stats: { dayStreak: 7, essaysWritten: 34, methodsTried: 2 },
     milestones: [
