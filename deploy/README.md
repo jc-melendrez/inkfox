@@ -87,6 +87,21 @@ sudo -u foxtutor /srv/foxtutor/backend/.venv/bin/pip install --upgrade pip
 sudo -u foxtutor /srv/foxtutor/backend/.venv/bin/pip install \
     -r /srv/foxtutor/backend/requirements.txt \
     -r /srv/foxtutor/deploy/requirements.txt
+
+# SELinux labels. Without these, Gunicorn fails to start with 203/EXEC when
+# SELinux is Enforcing (`Failed to locate executable ... Permission denied`).
+sudo semanage fcontext -a -t bin_t '/srv/foxtutor/backend/.venv/bin(/.*)?'
+sudo semanage fcontext -a -t lib_t '/srv/foxtutor/backend/.venv/lib(/.*)?'
+sudo semanage fcontext -a -t lib_t '/srv/foxtutor/backend/.venv/lib64(/.*)?'
+sudo restorecon -Rv /srv/foxtutor/backend/.venv
+
+# The deploy scripts are executed from /srv; label the directory (new checkouts
+# inherit it) and the scripts themselves.
+sudo semanage fcontext -a -t bin_t '/srv/foxtutor/deploy'
+sudo semanage fcontext -a -t bin_t '/srv/foxtutor/deploy/set-ip.sh'
+sudo semanage fcontext -a -t bin_t '/srv/foxtutor/deploy/backup.sh'
+sudo semanage fcontext -a -t bin_t '/srv/foxtutor/deploy/update.sh'
+sudo restorecon -Rv /srv/foxtutor/deploy
 ```
 
 ## 4. Environment file
@@ -374,5 +389,9 @@ sudo -u foxtutor bash -c 'set -a; . /etc/foxtutor/foxtutor.env; set +a; \
 - **Secrets** live only in `/etc/foxtutor/foxtutor.env`; never commit them.
 - **SELinux** must stay `Enforcing`. If a file is unreadable after an upload, the
   fix is a label (`semanage fcontext` + `restorecon`), never `setenforce 0`.
+- **203/EXEC after an update** means a pull or `pip install` recreated a file
+  without its label. The labeled directories normally make new files inherit it;
+  if not, run `sudo restorecon -Rv /srv/foxtutor/deploy /srv/foxtutor/backend/.venv`
+  and restart `foxtutor`.
 - **Access** `/admin/` only if you need it; create a superuser with
   `manage.py createsuperuser`.
